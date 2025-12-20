@@ -17,6 +17,8 @@ is the dashboard. The pro version of the dashboard does not only provide simple 
 information, but also includes trend analyses (such as size growth, duration 
 and more) and displays the backup history of the last 30 days.
 
+Pro Version: https://www.back-me-up-scotty.com/docs/what-is-bmus/buy-pro-dashboard/
+
 2. Key Features
 
 - Rsync-based: Efficient transfer, only changed files are copied.
