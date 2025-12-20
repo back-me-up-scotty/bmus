@@ -1,9 +1,13 @@
 1. What is BmuS?
 
 
-BmuS is a powerful free backup program for the automated backup 
+BmuS (https://www.back-me-up-scotty.com) is a powerful free backup program for the automated backup 
 of files, directories, and MySQL databases from a Linux / Raspberry Pi system 
 to a NAS or network drive. It features encryption, deduplication, and much more.
+
+For a short demo see here:
+
+https://www.youtube.com/watch?v=OmTRMqfe7oM
 
 BmuS was developed with low-resource systems in mind, enabling single-board 
 computers such as Raspberry Pi to run it efficiently.
