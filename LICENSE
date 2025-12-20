@@ -1,0 +1,54 @@
+BmuS COMMUNITY SOURCE - AVAILABLE LICENSE
+
+GRANT OF LICENSE
+
+Permission is hereby granted, free of charge, to any person or entity obtaining 
+
+copy of this software and associated documentation files (the "Software"), to 
+use the Software for PERSONAL and INTERNAL BUSINESS purposes, subject to the 
+following conditions: 
+
+a) Internal Use: You may install and use the Software on 
+an unlimited number of devices owned or controlled by you or your organization 
+to perform backups of your own data or systems.
+
+b) Modification: You may modify the source code of the Software for your own 
+internal needs or adaptation.
+
+RESTRICTIONS
+The rights granted above are strictly limited by the following prohibitions:
+
+a) No Sale or Resale: You may NOT sell, rent, lease, license, or sub-license the 
+Software or any parts thereof. The Software must remain free of charge.
+
+b) No Commercial Distribution: You may NOT include this Software as part of a 
+paid product, service package, or commercial distribution.
+
+c) No "Backup-as-a-Service": You may NOT use the Software to offer a paid backup 
+service to third parties where the Software itself is the primary value proposition.
+
+d) No Public Redistribution: You may NOT redistribute, upload to public repositories, 
+or publish the source code or binaries (original or modified) to the general public.
+
+e) This header must remain in the script and must not be deleted or modified.
+
+OWNERSHIP
+The original Author retains all right, title, and interest in and to the Software. 
+Modifications made by you remain your property but are subject to the distribution 
+restrictions of this license (i.e., you cannot sell or share your modifications publicly).
+
+DISCLAIMER OF WARRANTY
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. 
+THE AUTHORS OR COPYRIGHT HOLDERS SHALL NOT BE LIABLE FOR ANY DAMAGES, DATA LOSS, 
+OR LIABILITY ARISING FROM THE USE OF THE SOFTWARE. USE AT YOUR OWN RISK.
+
+===========================================================================
+ Author: Niels Gerhardt
+ 
+ Contact: bmus(AT)back-me-up-scotty(DOT)com
+ Web: https://www.back-me-up-scotty.com
+ Copyright (c) 2025 Niels Gerhardt
+ 
+ The author takes no responsibility for damage resulting from the use of the script. 
+ By using it, you acknowledge this.
+===========================================================================
