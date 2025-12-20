@@ -79,7 +79,7 @@ Multilingual languages available
 
 3. What is the design difference between tools such as Borg or Restic?
 
-README.mdWhile tools like BorgBackup and Restic are powerful industry standards for block-level 
+While tools like BorgBackup and Restic are powerful industry standards for block-level 
 deduplication, BmuS (Back Me Up Scotty) follows a different philosophy: The KISS 
 Principle (Keep It Simple, Stupid).
 
