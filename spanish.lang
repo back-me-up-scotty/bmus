@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.25.6) - SPANISH
+# Language File for BmuS - Backu Me Up Scotty (v.25.7) - SPANISH
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -309,9 +309,10 @@ CHART_LABEL_AVG_SIZE_MB="Ø Tamaño (MB)"
 CHART_LABEL_BACKUP_SIZE_MB="Tamaño Copia (MB)"
 CHART_LABEL_COPY_ERRORS="Errores de Copia"
 CHART_LABEL_CPU_LOAD="Carga de CPU (promedio 1m)"
-CHART_LABEL_IO_WAIT="Espera de I/O (%)"
 CHART_LABEL_DEDUP_RATE="Tasa Deduplicación (%)"
+CHART_LABEL_DELETED_ITEMS="Elementos eliminados"
 CHART_LABEL_DURATION_SEC="Duración (Segundos)"
+CHART_LABEL_IO_WAIT="Espera de I/O (%)"
 CHART_LABEL_NEW_DIRS="Nuevos Directorios"
 CHART_LABEL_NEW_FILES="Nuevos Archivos"
 CHART_LABEL_RAM_MAX="RAM Total"
@@ -329,6 +330,7 @@ CHART_TITLE_BACKUP_SPEED="Velocidad Copia"
 CHART_TITLE_DEDUP_RATE="Eficiencia Deduplicación en el Tiempo"
 CHART_TITLE_ERROR_RATE_TREND="Tendencia Tasa de Error"
 CHART_TITLE_RESOURCE_USAGE="Recursos del sistema durante la copia de seguridad"
+CHART_TITLE_RETENTION_TREND="Historial de eliminaciones (Limpieza)"
 CHART_TITLE_RETENTION_OVERVIEW="Resumen Retención"
 CHART_TITLE_SEC_PER_FILE="Velocidad de procesamiento"
 CHART_TITLE_STATUS_OVERVIEW="Resumen Resultados"
