@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.25.6) - HEBREW
+# Language File for BmuS - Backu Me Up Scotty (v.25.7) - HEBREW
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -309,9 +309,10 @@ CHART_LABEL_AVG_SIZE_MB="Ø גודל (MB)"
 CHART_LABEL_BACKUP_SIZE_MB="גודל גיבוי (MB)"
 CHART_LABEL_COPY_ERRORS="שגיאות העתקה"
 CHART_LABEL_CPU_LOAD="עומס CPU (ממוצע דקה)"
-CHART_LABEL_IO_WAIT="המתנת I/O (%)"
 CHART_LABEL_DEDUP_RATE="שיעור דה-דופליקציה (%)"
+CHART_LABEL_DELETED_ITEMS="פריטים שנמחקו"
 CHART_LABEL_DURATION_SEC="משך (שניות)"
+CHART_LABEL_IO_WAIT="המתנת I/O (%)"
 CHART_LABEL_NEW_DIRS="תיקיות חדשות"
 CHART_LABEL_NEW_FILES="קבצים חדשים"
 CHART_LABEL_RAM_MAX="RAM כולל"
@@ -328,6 +329,7 @@ CHART_TITLE_BACKUP_EFFICIENCY="יעילות גיבוי (קבצים ותיקיו�
 CHART_TITLE_BACKUP_SPEED="מהירות גיבוי"
 CHART_TITLE_DEDUP_RATE="יעילות דה-דופליקציה לאורך זמן"
 CHART_TITLE_ERROR_RATE_TREND="מגמת שיעור שגיאות"
+CHART_TITLE_RETENTION_TREND="היסטוריית מחיקות (ניקוי)"
 CHART_TITLE_RETENTION_OVERVIEW="סקירת שימור (Retention)"
 CHART_TITLE_RESOURCE_USAGE="משאבי מערכת במהלך הגיבוי"
 CHART_TITLE_SEC_PER_FILE="מהירות עיבוד"
