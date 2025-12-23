@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.25.8
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.25.9
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
@@ -3298,7 +3298,7 @@ if [ "${DASHBOARD_ENABLE:-0}" -eq 1 ]; then
                 fi
                 
                 
-                generate_dashboard "$OUTPUT_HTML" "$BACKUP_SIZE_HUMAN" "$BACKUP_FILE_COUNT" "$BACKUP_DIR_COUNT" "$DASHBOARD_DISPLAY_PATH" "$NAS_IP" "$MASTER_IP" "$TOTAL_DELETED_COUNT" "$COPY_ERRORS" "$VERIFY_ERRORS" "$START" "$END" "$DURATION" "$LOGFILE" "$DEDUP_LOGFILE" "$DELETED_FOLDERS" "$KEPT_FOLDERS" "$RESOURCE_LOGFILE" "$RAM_TOTAL_MB" "$DEDUP_SAVED_HUMAN" "$AVG_DURATION_HUMAN" "$SUCCESS_RATE_DISPLAY" "$MAX_SPIKE_HUMAN" "${DASHBOARD_LINE_NEW_DIRS:-100}" "$TOTAL_BACKUP_BYTES"
+                generate_dashboard "$OUTPUT_HTML" "$BACKUP_SIZE_HUMAN" "$BACKUP_FILE_COUNT" "$BACKUP_DIR_COUNT" "$DASHBOARD_DISPLAY_PATH" "$NAS_IP" "$MASTER_IP" "$TOTAL_DELETED_COUNT" "$COPY_ERRORS" "$VERIFY_ERRORS" "$START" "$END" "$DURATION" "$LOGFILE" "$DEDUP_LOGFILE" "$DELETED_FOLDERS" "$KEPT_FOLDERS" "$RESOURCE_LOGFILE" "$RAM_TOTAL_MB" "$DEDUP_SAVED_HUMAN" "$AVG_DURATION_HUMAN" "$SUCCESS_RATE_DISPLAY" "$MAX_SPIKE_HUMAN" "${DASHBOARD_LINE_NEW_DIRS:-100}" "$TOTAL_BACKUP_BYTES" "${BACKUP_AGE_DAYS:-0}" "${ENCRYPTED_BACKUP_AGE_DAYS:-0}"
                 # ===== [ End Dashboard call ] =====
                 
                 
