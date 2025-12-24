@@ -1,6 +1,6 @@
 <img width="1000" height="545" alt="Image" src="https://github.com/user-attachments/assets/9068281f-0c29-4a20-818b-d199a43bf372" />
 
-What is BmuS?
+**What is BmuS?**
 
 
 BmuS (https://www.back-me-up-scotty.com) is a powerful free backup program for the automated backup 
@@ -19,12 +19,13 @@ is the dashboard. The pro version of the dashboard does not only provide simple 
 information, but also includes trend analyses (such as size growth, duration 
 and more) and displays the backup history of the last 30 days.
 
-Dashboard Standard Version (included):
+**Dashboard Standard Version (included)**
 
 <img width="950" height="1257" alt="Image" src="https://github.com/user-attachments/assets/6cdfa626-ec66-4f2c-8182-69bc58988d6a" />
 
 
-Dashboard Pro Version (One time fee of $10 to support dev):
+**Dashboard Pro Version (One time fee of $10 to support dev)**
+
 <img width="950" height="500" alt="Image" src="https://github.com/user-attachments/assets/a7e36e45-a069-4aae-a4e1-dca43cad9f61" />
 <img width="950" height="501" alt="Image" src="https://github.com/user-attachments/assets/478162d8-2620-4e0a-8316-bbab474839ff" />
 <img width="950" height="590" alt="Image" src="https://github.com/user-attachments/assets/40483b11-b331-453d-8236-25475932df67" />
@@ -36,9 +37,9 @@ Dashboard Pro Version (One time fee of $10 to support dev):
 <img width="950" height="558" alt="Image" src="https://github.com/user-attachments/assets/9f13d420-b303-4a79-9052-daf07aeb6b28" />
 
 
-Pro Version: https://www.back-me-up-scotty.com/docs/what-is-bmus/buy-pro-dashboard/
+Pro Version:  [](https://www.back-me-up-scotty.com/docs/what-is-bmus/buy-pro-dashboard/)
 
-Key Features
+**Key Features**
 
 - Rsync-based: Efficient transfer, only changed files are copied.
 - Deduplication: Uses hardlinks to save storage space. You have access 
@@ -101,7 +102,7 @@ Multilingual languages available
 
 ------------------------------------------------------------------------------------
 
-What is the design difference between tools such as Borg or Restic?
+**What is the design difference between tools such as Borg or Restic?**
 
 While tools like BorgBackup and Restic are powerful industry standards for block-level 
 deduplication, BmuS (Back Me Up Scotty) follows a different philosophy: The KISS 
