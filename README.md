@@ -32,7 +32,6 @@ and more) and displays the backup history of the last 30 days.
 <img width="950" height="590" alt="Image" src="https://github.com/user-attachments/assets/17e73897-89b3-4465-bc52-472396a37680" />
 <img width="950" height="272" alt="Image" src="https://github.com/user-attachments/assets/b92773a2-7327-446a-90ae-7818480b4514" />
 <img width="950" height="490" alt="Image" src="https://github.com/user-attachments/assets/575e0d63-a25b-434a-9bde-d1203148ce9f" />
-<img width="950" height="177" alt="Image" src="https://github.com/user-attachments/assets/169fe0e7-3204-4413-bb5a-9483cababca4" />
 <img width="950" height="438" alt="Image" src="https://github.com/user-attachments/assets/1ad53c0f-2154-4fac-ac77-4019f0f6d2f9" />
 <img width="950" height="558" alt="Image" src="https://github.com/user-attachments/assets/9f13d420-b303-4a79-9052-daf07aeb6b28" />
 
