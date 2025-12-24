@@ -1,4 +1,6 @@
-1. What is BmuS?
+<img width="1000" height="545" alt="Image" src="https://github.com/user-attachments/assets/9068281f-0c29-4a20-818b-d199a43bf372" />
+
+What is BmuS?
 
 
 BmuS (https://www.back-me-up-scotty.com) is a powerful free backup program for the automated backup 
@@ -7,7 +9,7 @@ to a NAS or network drive. It features encryption, deduplication, and much more.
 
 For a short demo see here:
 
-https://www.youtube.com/watch?v=OmTRMqfe7oM
+[YouTube](https://www.youtube.com/watch?v=OmTRMqfe7oM)
 
 BmuS was developed with low-resource systems in mind, enabling single-board 
 computers such as Raspberry Pi to run it efficiently.
@@ -17,15 +19,30 @@ is the dashboard. The pro version of the dashboard does not only provide simple 
 information, but also includes trend analyses (such as size growth, duration 
 and more) and displays the backup history of the last 30 days.
 
+Dashboard Standard Version (included):
+
+<img width="950" height="1257" alt="Image" src="https://github.com/user-attachments/assets/6cdfa626-ec66-4f2c-8182-69bc58988d6a" />
+
+
+Dashboard Pro Version (One time fee of $10 to support dev):
+<img width="950" height="500" alt="Image" src="https://github.com/user-attachments/assets/a7e36e45-a069-4aae-a4e1-dca43cad9f61" />
+<img width="950" height="501" alt="Image" src="https://github.com/user-attachments/assets/478162d8-2620-4e0a-8316-bbab474839ff" />
+<img width="950" height="590" alt="Image" src="https://github.com/user-attachments/assets/40483b11-b331-453d-8236-25475932df67" />
+<img width="950" height="590" alt="Image" src="https://github.com/user-attachments/assets/17e73897-89b3-4465-bc52-472396a37680" />
+<img width="950" height="272" alt="Image" src="https://github.com/user-attachments/assets/b92773a2-7327-446a-90ae-7818480b4514" />
+<img width="950" height="490" alt="Image" src="https://github.com/user-attachments/assets/575e0d63-a25b-434a-9bde-d1203148ce9f" />
+<img width="950" height="177" alt="Image" src="https://github.com/user-attachments/assets/169fe0e7-3204-4413-bb5a-9483cababca4" />
+<img width="950" height="438" alt="Image" src="https://github.com/user-attachments/assets/1ad53c0f-2154-4fac-ac77-4019f0f6d2f9" />
+<img width="950" height="558" alt="Image" src="https://github.com/user-attachments/assets/9f13d420-b303-4a79-9052-daf07aeb6b28" />
+
+
 Pro Version: https://www.back-me-up-scotty.com/docs/what-is-bmus/buy-pro-dashboard/
 
-2. Key Features
+Key Features
 
 - Rsync-based: Efficient transfer, only changed files are copied.
-
 - Deduplication: Uses hardlinks to save storage space. You have access 
   to full snapshots at any time without using up storage space for unchanged files.
-
 - Automatic verification of data integrity
 
 Encryption:
@@ -82,8 +99,9 @@ Multilingual languages available
 
 -  Your own language files can be added easily
 
+------------------------------------------------------------------------------------
 
-3. What is the design difference between tools such as Borg or Restic?
+What is the design difference between tools such as Borg or Restic?
 
 While tools like BorgBackup and Restic are powerful industry standards for block-level 
 deduplication, BmuS (Back Me Up Scotty) follows a different philosophy: The KISS 
