@@ -36,7 +36,7 @@ and more) and displays the backup history of the last 30 days.
 <img width="950" height="558" alt="Image" src="https://github.com/user-attachments/assets/9f13d420-b303-4a79-9052-daf07aeb6b28" />
 
 
-Pro Version:  [](https://www.back-me-up-scotty.com/docs/what-is-bmus/buy-pro-dashboard/)
+For more on Pro Version:  [https://www.back-me-up-scotty.com/docs/what-is-bmus/buy-pro-dashboard/](https://www.back-me-up-scotty.com/docs/what-is-bmus/buy-pro-dashboard/)
 
 **Key Features**
 
