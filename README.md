@@ -26,14 +26,19 @@ and more) and displays the backup history of the last 30 days.
 
 **Dashboard Pro Version (One time fee of $10 to support dev)**
 
-<img width="950" height="500" alt="Image" src="https://github.com/user-attachments/assets/a7e36e45-a069-4aae-a4e1-dca43cad9f61" />
-<img width="950" height="501" alt="Image" src="https://github.com/user-attachments/assets/478162d8-2620-4e0a-8316-bbab474839ff" />
-<img width="950" height="590" alt="Image" src="https://github.com/user-attachments/assets/40483b11-b331-453d-8236-25475932df67" />
-<img width="950" height="590" alt="Image" src="https://github.com/user-attachments/assets/17e73897-89b3-4465-bc52-472396a37680" />
-<img width="950" height="272" alt="Image" src="https://github.com/user-attachments/assets/b92773a2-7327-446a-90ae-7818480b4514" />
-<img width="950" height="490" alt="Image" src="https://github.com/user-attachments/assets/575e0d63-a25b-434a-9bde-d1203148ce9f" />
-<img width="950" height="438" alt="Image" src="https://github.com/user-attachments/assets/1ad53c0f-2154-4fac-ac77-4019f0f6d2f9" />
-<img width="950" height="558" alt="Image" src="https://github.com/user-attachments/assets/9f13d420-b303-4a79-9052-daf07aeb6b28" />
+<img width="950" height="507" alt="Image" src="https://github.com/user-attachments/assets/1231a593-8364-414d-9a2f-f6512722a4e9" />
+<img width="950" height="370" alt="Image" src="https://github.com/user-attachments/assets/1763b624-805e-48c6-8d4c-602174afa7fc" />
+<img width="950" height="606" alt="Image" src="https://github.com/user-attachments/assets/0c77fb98-13a3-4dbc-a3f6-6a4fa7826855" />
+<img width="950" height="310" alt="Image" src="https://github.com/user-attachments/assets/63e8a266-2968-4d63-b5b1-9af0e7c22b20" />
+<img width="950" height="269" alt="Image" src="https://github.com/user-attachments/assets/e2cb6417-e1d1-4a00-8b9b-36ceda5c78bf" />
+<img width="950" height="283" alt="Image" src="https://github.com/user-attachments/assets/0342c79c-a91d-4c8f-9ea8-f74ee1ba477a" />
+<img width="950" height="285" alt="Image" src="https://github.com/user-attachments/assets/03999f3e-4508-4322-8444-7f217976a8ce" />
+<img width="950" height="276" alt="Image" src="https://github.com/user-attachments/assets/6c4fbb18-1d47-4fe4-a71b-f5b516333843" />
+<img width="950" height="258" alt="Image" src="https://github.com/user-attachments/assets/b05e2815-ad7f-49b7-bf03-3b0c4dcc88a7" />
+<img width="950" height="335" alt="Image" src="https://github.com/user-attachments/assets/f84ffc4f-6333-4931-b64a-0f7538183726" />
+<img width="950" height="174" alt="Image" src="https://github.com/user-attachments/assets/51f0409b-2dad-4634-9726-259549dd40c2" />
+<img width="950" height="450" alt="Image" src="https://github.com/user-attachments/assets/3f4e44a2-dbed-4a4c-9f93-582883b13187" />
+<img width="950" height="630" alt="Image" src="https://github.com/user-attachments/assets/879a5dbf-3f69-4be3-a2e2-999988635142" />
 
 
 For more on Pro Version:  [https://www.back-me-up-scotty.com/docs/what-is-bmus/buy-pro-dashboard/](https://www.back-me-up-scotty.com/docs/what-is-bmus/buy-pro-dashboard/)
