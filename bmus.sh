@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.25.9
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.0
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
@@ -63,14 +63,27 @@
 # Load configuration file. Change this to your home directory or 
 # wherever bmus is stored.
 #
-CONFIG_FILE="${CONFIG_FILE:-/home/user/bmus.conf}"
 # -------------------------------------------------------------------------
+# PATH DETECTION (UNIVERSAL MODE)
+# -------------------------------------------------------------------------
+# Determine where the script is located
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
+# 1. Determine Configuration Path
+# If CONFIG_FILE is passed via ENV (Docker), use it.
+# Otherwise, look for bmus.conf in the same directory as the script (Bare Metal).
+if [ -z "$CONFIG_FILE" ]; then
+    # Bare Metal / Standard Mode
+    CONFIG_FILE="$SCRIPT_DIR/bmus.conf"
+    CONFIG_DIR="$SCRIPT_DIR"
+else
+    # Docker / Custom Mode (ENV variable is set)
+    CONFIG_DIR="$(dirname "$CONFIG_FILE")"
+fi
 
 # --- [ 1. LOAD CONFIG ] ------------------------------------
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "FATAL ERROR: Configuration file not found: $CONFIG_FILE"
-    echo "Please create the file or set the environment variable CONFIG_FILE"
-    echo "Example: CONFIG_FILE=/path/to/backup.conf \$0"
     exit 1
 fi
 
@@ -140,20 +153,27 @@ check_nas_reachability() {
 
 # --- [ ENCRYPTION: Load encryption functions ] ---
 
-if [ -f "$(dirname "$0")/$BACKUP_ENCRYPTION_SCRIPT" ]; then
-    source "$(dirname "$0")/$BACKUP_ENCRYPTION_SCRIPT"
+if [ -f "$SCRIPT_DIR/$BACKUP_ENCRYPTION_SCRIPT" ]; then
+    source "$SCRIPT_DIR/$BACKUP_ENCRYPTION_SCRIPT"
 fi
 # --- [ END: Encryption functions loaded ] ---
 
-# --- [ 2. LOAD LANGUAGE FILE (DYNAMIC) ] ------------------------------
-# Use the variable from the config. Falls back to 'english' if not set.
+# --- [ 2. LOAD LANGUAGE FILE (DYNAMIC & UNIVERSAL) ] -------------------
 LANG_CODE="${LANGUAGE:-english}"
-LANG_FILE="$(dirname "$0")/${LANG_CODE}.lang"
 
-if [ ! -f "$LANG_FILE" ]; then
-    # Error must be harcoded if language file is not found
-    echo "FATAL ERROR: Language file not found: $LANG_FILE (Language code: $LANG_CODE)"
-    echo "Please ensure the file exists or set LANGUAGE='' in $CONFIG_FILE"
+# Strategy:
+# 1. Check in CONFIG_DIR (Preferred for Docker/User-Customization)
+# 2. Check in SCRIPT_DIR (Fallback for Bare Metal original files)
+
+if [ -f "$CONFIG_DIR/${LANG_CODE}.lang" ]; then
+    LANG_FILE="$CONFIG_DIR/${LANG_CODE}.lang"
+elif [ -f "$SCRIPT_DIR/${LANG_CODE}.lang" ]; then
+    LANG_FILE="$SCRIPT_DIR/${LANG_CODE}.lang"
+else
+    echo "FATAL ERROR: Language file not found!"
+    echo "Searched in:"
+    echo "  1. $CONFIG_DIR/${LANG_CODE}.lang"
+    echo "  2. $SCRIPT_DIR/${LANG_CODE}.lang"
     exit 1
 fi
 
