@@ -2,22 +2,27 @@
 
 **What is BmuS?**
 
-
-BmuS (https://www.back-me-up-scotty.com) is a powerful free backup program for the automated backup 
-of files, directories, and MySQL databases from a Linux / Raspberry Pi system 
-to a NAS or network drive. It features encryption, deduplication, and much more.
+BmuS is a powerful free backup program for the automated backup of files, directories, and MySQL databases from a 
+Linux / Raspberry Pi system to a NAS or network drive. You can also sync two NAS (i.e. Synology to Synology 
+or UGREEN etc. and vice versa).
 
 For a short demo see here:
 
 [YouTube](https://www.youtube.com/watch?v=OmTRMqfe7oM)
 
-BmuS was developed with low-resource systems in mind, enabling single-board 
-computers such as Raspberry Pi to run it efficiently.
+BmuS features encryption, deduplication, and much more.
 
-One of the key features that has received special attention (or is it called “Love”?) 
-is the dashboard. The pro version of the dashboard does not only provide simple status 
-information, but also includes trend analyses (such as size growth, duration 
-and more) and displays the backup history of the last 30 days.
+BmuS can be installed directly on the source system or via a Docker repository, which is also available.
+
+BmuS was developed with low-resource systems in mind, enabling even single-board computers such as 
+Raspberry Pi to run it efficiently.
+
+One of the key features that has received special attention (or is it called “Love”?) is the dashboard, which is 
+probably the most unique feature of BmuS, apart from the fact that only a few backup tools can back up files 
+AND MySQL/MariaDB databases at the same time.
+
+The pro version of the dashboard does not only provide simple status information, but also includes trend analyses 
+(such as size growth, duration and more) and displays the backup history of the last 30 days.
 
 **Dashboard Standard Version (included)**
 
@@ -50,6 +55,7 @@ For more on Pro Version:  [https://www.back-me-up-scotty.com/docs/what-is-bmus/b
 - Deduplication: Uses hardlinks to save storage space. You have access 
   to full snapshots at any time without using up storage space for unchanged files.
 - Automatic verification of data integrity
+- Docker version available
 
 Encryption:
 
