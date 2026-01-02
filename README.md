@@ -10,6 +10,9 @@ For a short demo see here:
 
 [YouTube](https://www.youtube.com/watch?v=OmTRMqfe7oM)
 
+To learn how to configure and use BmuS, please visit the user manual at: 
+https://www.back-me-up-scotty.com/docs/what-is-bmus/
+
 BmuS features encryption, deduplication, and much more.
 
 BmuS can be installed directly on the source system or via a Docker repository, which is also available.
