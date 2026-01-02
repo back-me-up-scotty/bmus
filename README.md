@@ -22,7 +22,8 @@ https://www.back-me-up-scotty.com/docs/what-is-bmus/
 You can either simply save all BmuS files in a folder on your drive and make it executable, 
 or you can use Docker. 
 
-In this case, you must first download the [zip file](https://github.com/back-me-up-scotty/bmus/blob/main/Bmus-Docker.zip).
+In this case, you just need to download the 
+[zip file](https://github.com/back-me-up-scotty/bmus/blob/main/Bmus-Docker.zip).
 
 1. EXTRACT
    Unzip this folder to a directory on your system (e.g., /docker/bmus 
