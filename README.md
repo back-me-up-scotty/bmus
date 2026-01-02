@@ -10,21 +10,64 @@ For a short demo see here:
 
 [YouTube](https://www.youtube.com/watch?v=OmTRMqfe7oM)
 
+
+**Installation, Configuration & Use**
+
 To learn how to configure and use BmuS, please visit the user manual at: 
 https://www.back-me-up-scotty.com/docs/what-is-bmus/
 
-BmuS features encryption, deduplication, and much more.
 
-BmuS can be installed directly on the source system or via a Docker repository, which is also available.
+**Docker install**
 
-BmuS was developed with low-resource systems in mind, enabling even single-board computers such as 
+You can either simply save all BmuS files in a folder on your drive and make it executable, 
+or you can use Docker. 
+
+In this case, you must first download the [zip file](https://github.com/back-me-up-scotty/bmus/blob/main/Bmus-Docker.zip).
+
+1. EXTRACT
+   Unzip this folder to a directory on your system (e.g., /docker/bmus 
+   or /home/bmus).
+
+   The zip file contains the following files:
+   
+   - bmus (a wrapper for conveniently sending commands to the container)
+   - docker-compose.yml (the building instructions for Docker)
+   - /config (folder containing all important configuration files)
+   - README.txt
+
+3. CONFIGURE
+   Go into the 'config' folder and edit the configuration files.
+   
+   These are 'bmus.conf', 'bmus_credentials', 'bmus_geocryptfs', 'msmtp.conf' 
+   (msmtp.conf in case you want to have the report via email). 
+   
+   This must be done before starting!
+
+4. START
+   Open a terminal, navigate to this folder, and run:
+   
+     sudo docker compose up -d
+
+  Docker will automatically download the latest image and start the background service.
+   
+  Alternative: If you prefer GitHub Container Registry, use 
+  image: ghcr.io/backmeupscotty/bmus:latest in the docker-compose.yml.
+
+
+**Features**
+
+- BmuS features encryption, deduplication, and much more.
+
+- BmuS can be installed directly on the source system or via a Docker repository, which is also available.
+
+- BmuS was developed with low-resource systems in mind, enabling even single-board computers such as 
 Raspberry Pi to run it efficiently.
 
-One of the key features that has received special attention (or is it called “Love”?) is the dashboard, which is 
+- One of the key features that has received special attention (or is it called “Love”?) is the dashboard, which is 
 probably the most unique feature of BmuS, apart from the fact that only a few backup tools can back up files 
 AND MySQL/MariaDB databases at the same time.
 
-The pro version of the dashboard does not only provide simple status information, but also includes trend analyses 
+- The pro version of the dashboard does not only provide simple status information, but also includes trend analyses 
 (such as size growth, duration and more) and displays the backup history of the last 30 days.
 
 **Dashboard Standard Version (included)**
