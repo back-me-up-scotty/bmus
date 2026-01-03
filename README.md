@@ -26,6 +26,7 @@ In this case, you just need to download the
 [zip file](https://github.com/back-me-up-scotty/bmus/blob/main/Bmus-Docker.zip).
 
 1. EXTRACT
+   
    Unzip this folder to a directory on your system (e.g., /docker/bmus 
    or /home/bmus).
 
@@ -36,7 +37,8 @@ In this case, you just need to download the
    - /config (folder containing all important configuration files)
    - README.txt
 
-3. CONFIGURE
+2. CONFIGURE
+   
    Go into the 'config' folder and edit the configuration files.
    
    These are 'bmus.conf', 'bmus_credentials', 'bmus_geocryptfs', 'msmtp.conf' 
@@ -44,7 +46,8 @@ In this case, you just need to download the
    
    This must be done before starting!
 
-4. START
+3. START
+   
    Open a terminal, navigate to this folder, and run:
    
      sudo docker compose up -d
