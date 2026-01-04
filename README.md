@@ -9,9 +9,6 @@ or UGREEN etc. and vice versa).
 BmuS can be installed directly on the source system or via a Docker repository, which is also available. 
 With Docker, you can easily use BmuS on different operating systems, such as a **Mac** or **Windows**. 
 
-Visit the [Quick Start Guide](https://www.back-me-up-scotty.com/docs/quick-start-guide-native-mac-win-docker/) and 
-the FAQ on our Website to learn how to install Docker and Bmus on a [Mac](https://www.back-me-up-scotty.com/faq/can-i-backup-my-mac/) or [Windows](https://www.back-me-up-scotty.com/faq/can-i-backup-windows/).
-
 **For a short demo see here:**
 
 [YouTube](https://www.youtube.com/watch?v=OmTRMqfe7oM)
@@ -25,43 +22,8 @@ https://www.back-me-up-scotty.com/docs/what-is-bmus/
 
 **Docker install**
 
-You can either simply save all BmuS files in a folder on your drive and make it executable, 
-or you can use Docker. 
-
-In this case, you just need to download the 
-[zip file](https://github.com/back-me-up-scotty/bmus/blob/main/Bmus-Docker.zip).
-
-1. EXTRACT
-   
-   Unzip this folder to a directory on your system (e.g., /docker/bmus 
-   or /home/bmus).
-
-   The zip file contains the following files:
-   
-   - bmus (a wrapper for conveniently sending commands to the container)
-   - docker-compose.yml (the building instructions for Docker)
-   - /config (folder containing all important configuration files)
-   - README.txt
-
-2. CONFIGURE
-   
-   Go into the 'config' folder and edit the configuration files.
-   
-   These are 'bmus.conf', 'bmus_credentials', 'bmus_geocryptfs', 'msmtp.conf' 
-   (msmtp.conf in case you want to have the report via email). 
-   
-   This must be done before starting!
-
-3. START
-   
-   Open a terminal, navigate to this folder, and run:
-   
-     sudo docker compose up -d
-
-  Docker will automatically download the latest image and start the background service.
-   
-  Alternative: If you prefer GitHub Container Registry, use 
-  image: ghcr.io/backmeupscotty/bmus:latest in the docker-compose.yml.
+Visit the [Quick Start Guide](https://www.back-me-up-scotty.com/docs/quick-start-guide-native-mac-win-docker/) and 
+the FAQ on our Website to learn how to install Docker and Bmus on a [Mac](https://www.back-me-up-scotty.com/faq/can-i-backup-my-mac/) or [Windows](https://www.back-me-up-scotty.com/faq/can-i-backup-windows/).
 
 
 **Features**
