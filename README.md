@@ -9,7 +9,8 @@ or UGREEN etc. and vice versa).
 BmuS can be installed directly on the source system or via a Docker repository, which is also available. 
 With Docker, you can easily use BmuS on different operating systems, such as a **Mac** or **Windows**. 
 
-Visit the FAQ on our Website to learn how to install Docker and Bmus on a [Mac](https://www.back-me-up-scotty.com/faq/can-i-backup-my-mac/) or [Windows](https://www.back-me-up-scotty.com/faq/can-i-backup-windows/).
+Visit the [Quick Start Guide](https://www.back-me-up-scotty.com/docs/quick-start-guide-native-mac-win-docker/) and 
+the FAQ on our Website to learn how to install Docker and Bmus on a [Mac](https://www.back-me-up-scotty.com/faq/can-i-backup-my-mac/) or [Windows](https://www.back-me-up-scotty.com/faq/can-i-backup-windows/).
 
 **For a short demo see here:**
 
