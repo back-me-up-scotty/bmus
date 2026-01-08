@@ -1,1 +1,3 @@
 The full documentation on installation, configuration, FAQs, and more can be found at: https://www.back-me-up-scotty.com
+
+For native install "chmod +x install_dependencies.sh" and run. Do not use for docker install.
