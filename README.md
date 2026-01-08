@@ -21,9 +21,18 @@ https://www.back-me-up-scotty.com/docs/what-is-bmus/
 
 **Native install**
 
-1. cd bmus/
-2. sudo chmod +x install_dependencies.sh
-3. sudo install_dependencies.sh
+1. Download BmuS either from our [Website](https://www.back-me-up-scotty.com/docs/what-is-bmus/download/)  and unzip 
+
+**OR** via GitHub
+
+`git clone https://github.com/back-me-up-scotty/bmus.git`
+
+2. `cd bmus/`
+3. `chmod +x install_dependencies.sh`
+4. `sudo bash install_dependencies.sh`
+5. Configure bmus_credentials
+6. Configure bmus.conf
+7. Give proper rights (install_dependencies.sh does that for you)
 
 **Docker install**
 
