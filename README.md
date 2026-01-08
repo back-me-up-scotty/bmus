@@ -10,7 +10,7 @@ BmuS can be installed directly on the source system (just run install_dependenci
 With Docker, you can easily use BmuS on different operating systems, such as a **Mac** or **Windows**. 
 
 **For a short demo see here:**
-
+[![BmuS on Youtube](https://img.youtube.com/vi/OmTRMqfe7oM/0.jpg)](https://www.youtube.com/watch?v=OmTRMqfe7oM)
 [YouTube](https://www.youtube.com/watch?v=OmTRMqfe7oM)
 
 
