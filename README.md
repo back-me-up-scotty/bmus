@@ -6,7 +6,7 @@ BmuS is a powerful free backup program for the automated backup of files, direct
 Linux / Raspberry Pi system to a NAS or network drive. You can also sync two NAS (i.e. Synology to Synology 
 or UGREEN etc. and vice versa). 
 
-BmuS can be installed directly on the source system or via a Docker repository, which is also available. 
+BmuS can be installed directly on the source system (just run install_dependencies.sh) or via a Docker repository, which is also available. 
 With Docker, you can easily use BmuS on different operating systems, such as a **Mac** or **Windows**. 
 
 **For a short demo see here:**
@@ -19,6 +19,11 @@ With Docker, you can easily use BmuS on different operating systems, such as a *
 To learn how to configure and use BmuS, please visit the user manual at: 
 https://www.back-me-up-scotty.com/docs/what-is-bmus/
 
+**Native install**
+
+1. cd bmus/
+2. sudo chmod +x install_dependencies.sh
+3. sudo install_dependencies.sh
 
 **Docker install**
 
