@@ -30,8 +30,8 @@ https://www.back-me-up-scotty.com/docs/what-is-bmus/
 2. `cd bmus/`
 3. `chmod +x install_dependencies.sh`
 4. `sudo bash install_dependencies.sh`
-5. Configure bmus_credentials
-6. Configure bmus.conf
+5. Configure [bmus_credentials](https://www.back-me-up-scotty.com/docs/configuration/bmus_credentials-sh-password-file/)
+6. Configure [bmus.conf](https://www.back-me-up-scotty.com/docs/configuration/main-configuration/)
 7. Give proper rights (install_dependencies.sh does that for you)
 
 **Docker install**
