@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =========================================================================
-# BmuS - Full Dependency Installer & Security Setup
+# BmuS - Full Dependency Installer & Security Setup V.3.0
 # Installs CORE system tools and BmuS specific requirements.
 # Tested on: Debian, Ubuntu, Raspberry Pi OS (Raspbian)
 # =========================================================================
@@ -47,6 +47,8 @@ PACKAGES=(
     "iputils-ping"      # For network checks (ping)
     "cifs-utils"        # Mount Windows Shares (SMB/CIFS)
     "nfs-common"        # Mount NFS Shares
+    "net-tools"         # Network tools (ifconfig, netstat) - Critical for Docker
+    "iproute2"          # Modern network tools (ip) - Critical for Docker
     
     # --- Database ---
     "mysql-client"      # Standard MySQL Client
@@ -60,8 +62,10 @@ PACKAGES=(
     # --- BmuS Logic & Security ---
     "rsync"             # The heart of the backup
     "bc"                # Floating Point Math (Critical for Dashboard Speed Calc)
+    "sysstat"           # System performance tools (mpstat for CPU usage)
     "gnupg"             # For DB Dump Encryption
     "gocryptfs"         # For File System Encryption
+    "rclone"            # For Cloud Uploads (Dropbox, Drive, etc.)
 )
 
 # 4. Installation Loop
