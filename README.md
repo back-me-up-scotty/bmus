@@ -209,7 +209,7 @@ notification, change the logging format, or tweak the logic, you can do it yours
 
 ---
 
-## 📜 License & Credits
+## 📜 Credits
 
 
 This project uses several open-source tools to do the heavy lifting.
