@@ -42,7 +42,7 @@ the FAQ on our Website to learn how to install Docker and Bmus on a [Mac](https:
 
 **Features**
 
-- BmuS features encryption, deduplication, and much more.
+- BmuS features encryption, deduplication, cloud storage / backup and much more.
 
 - BmuS can be installed directly on the source system or via a Docker repository, which is also available.
 
@@ -88,6 +88,12 @@ For more on Pro Version:  [https://www.back-me-up-scotty.com/docs/what-is-bmus/b
   to full snapshots at any time without using up storage space for unchanged files.
 - Automatic verification of data integrity
 - Docker version available
+
+Cloud Services
+
+BmuS uses rclone and supports following cloud services: 
+
+1Fichier, Akamai NetStorage, Amazon Drive, Amazon S3 Compliant Storage Providers including AWS, Alibaba, Ceph, China Mobile, Cloudflare, ArvanCloud, Digital Ocean, Dreamhost, Huawei OBS, IBM COS, IDrive e2, IONOS Cloud, Lyve Cloud, Minio, Netease, RackCorp, Scaleway, SeaweedFS, StackPath, Storj, Tencent COS, Qiniu and Wasabi, Backblaze B2, Better checksums for other remotes, Box, Cache a remote, Citrix Sharefile, Combine several remotes into one, Compress a remote, Dropbox, Encrypt/Decrypt a remote, Enterprise File Fabric, FTP, Google Cloud Storage (this is not Google Drive), Google Drive, Google Photos, Hadoop distributed file system, HiDrive, HTTP, In memory object storage system, Internet Archive, Jottacloud, Koofr, Digi Storage and other Koofr-compatible storage providers, Local Disk, Mail.ru Cloud, Microsoft Azure Blob Storage, Microsoft OneDrive, OpenDrive, OpenStack Swift (Rackspace Cloud Files, Memset Memstore, OVH), Pcloud, premiumize.me, Put.io, seafile, Sia Decentralized Cloud, SMB / CIFS, SSH / SFTP, Sugarsync, Uptobox, WebDAV, Yandex Disk, Zoho
 
 Encryption:
 
