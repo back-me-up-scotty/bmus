@@ -206,3 +206,19 @@ they work, you need to be a software engineer.
 
 BmuS Approach: It is a transparent Bash script. If you want to add a custom 
 notification, change the logging format, or tweak the logic, you can do it yourself in minutes.
+
+---
+
+## 📜 License & Credits
+
+
+This project uses several open-source tools to do the heavy lifting.
+Special thanks to the developers of:
+
+* **Rsync** (GPL) - for local file synchronization.
+* **Rclone** (MIT) - for cloud storage connectivity.
+* **Gocryptfs** (MIT) - for encryption.
+* **MariaDB Client** (GPL) - for database dumps.
+* **Docker** (Apache 2.0) - for containerization.
+
+The Docker image is based on **Debian Bookworm Slim**.
