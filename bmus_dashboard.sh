@@ -1,5 +1,5 @@
 #!/bin/bash
-# Dashboard Generator v.24.9
+# Dashboard Generator v.25.0
 # This script generates the dashboard with Dark/Light mode support.
 
 generate_dashboard() {
@@ -28,6 +28,39 @@ generate_dashboard() {
     max_spike="${23}" 
     max_new_dirs="${24:-50}" 
     raw_bytes="${25:-0}" 
+    retention_days="${26:-0}"
+    enc_retention_days="${27:-0}"  
+    cloud_backup_enabled="${28:-0}"
+    cloud_status="${29:-}"
+
+# --- [ CLOUD WIDGET LOGIC ] ---
+    CLOUD_WIDGET_HTML=""
+    if [ "$cloud_backup_enabled" -eq 1 ]; then
+        case "$cloud_status" in
+            "SUCCESS")
+                c_val="$DASH_CLOUD_SUCCESS"
+                c_class="success"
+                ;;
+            "SKIPPED_DRYRUN")
+                c_val="$DASH_CLOUD_DRYRUN"
+                c_class="" 
+                ;;
+            "ERROR_SPACE")
+                c_val="$DASH_CLOUD_SPACE"
+                c_class="error"  
+                ;;
+            "ERROR_CONFIG")
+                c_val="$DASH_CLOUD_CONFIG_ERROR"
+                c_class="error"
+                ;;
+            *)
+                c_val="$DASH_CLOUD_ERROR"
+                c_class="error"
+                ;;
+        esac
+        # CSS class .stat-card is already defined in your template
+        CLOUD_WIDGET_HTML="<div class=\"stat-card $c_class\"><div class=\"label\">$DASH_CLOUD_TITLE</div><div class=\"value\">$c_val</div></div>"
+    fi
 
     # Convert Epoch times to human-readable format
     start_human=$(date -d "@$start_ts" '+%d.%m.%Y %H:%M:%S')
@@ -599,6 +632,6 @@ EOF
     sed -i "s|END_HUMAN_PLACEHOLDER|$end_human|g" "$out"
     sed -i "s|DURATION_S_PLACEHOLDER|$duration_s|g" "$out"
     sed -i "s|GENERATED_AT_PLACEHOLDER|$(date '+%d.%m.%Y %H:%M:%S')|g" "$out"
-
+    sed -i "s|CLOUD_WIDGET_PLACEHOLDER|$CLOUD_WIDGET_HTML|g" "$out"
     return 0
 }
