@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.0
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.3
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
@@ -1383,6 +1383,9 @@ run_system_check() {
     check_command "head" "required" "coreutils"
     check_command "ping" "required" "iputils-ping"
     check_command "base64" "required" "coreutils"
+    check_command "bc" "required" "bc"
+    check_command "mpstat" "required" "sysstat"
+    check_command "ip" "required" "iproute2"
 
     echo ""
     echo "$MSG_SUB_TITLE_CONDITIONAL"
@@ -1398,7 +1401,16 @@ run_system_check() {
         echo "$MSG_MYSQL_DISABLED"
         echo "$MSG_MYSQL_NOT_REQUIRED"
     fi
-
+  # --- Check for rclone (if Cloud Backup is enabled) ---
+    if [ "${CLOUD_BACKUP:-0}" -eq 1 ]; then
+        if ! command -v rclone >/dev/null 2>&1; then
+            echo "$ERR_CHECK_RCLONE"
+            echo "$ERR_INSTALL_RCLONE"
+            ((MISSING++))
+        else
+            echo "$(printf "$MSG_CMD_OK" "rclone" "$(command -v rclone)")"
+        fi
+    fi
     # E-Mail check
     if [ "${SEND_MAIL:-0}" -eq 1 ]; then
         echo ""
@@ -1728,17 +1740,25 @@ if [ "${FIRST_CHECK:-0}" -eq 1 ]; then
         echo "==========================================================================="
         echo ""
         
-        # Set FIRST_CHECK to 0 in the config file
+        # --- [ FIXED: Robust Config Update for Docker Volumes ] ---
+        # Instead of sed -i (which replaces the file/inode and breaks mounts),
+        # we write to a temp file and redirect content back to the original file.
         if [ -w "$CONFIG_FILE" ]; then
-            sed -i 's/^FIRST_CHECK=1/FIRST_CHECK=0/' "$CONFIG_FILE"
-            echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_FIRST_CHECK_SET" "$CONFIG_FILE")"
-            echo ""
+            if sed 's/^FIRST_CHECK=.*/FIRST_CHECK="0"/' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp"; then
+                cat "${CONFIG_FILE}.tmp" > "$CONFIG_FILE"
+                rm -f "${CONFIG_FILE}.tmp"
+                echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_FIRST_CHECK_SET" "$CONFIG_FILE")"
+                echo ""
+            else
+                echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $ERR_CONFIG_UPDATE_FAILED"
+            fi
         else
             echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $WARN_HISTORY_ROTATION_FAIL"
             echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$WARN_HISTORY_NO_WRITE_PERMS" "$CONFIG_FILE")"
             echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $WARN_HISTORY_MANUAL_CHANGE"
             echo ""
         fi
+        # --- [ END: Fixed Config Update ] ---
         
         sleep 2
     else
@@ -2154,7 +2174,8 @@ while [ $CURRENT_ATTEMPT -lt $MAX_ATTEMPTS ] && [ $MOUNT_SUCCESS -eq 0 ]; do
                 # ADDED: mfsymlinks to fix copy errors in /etc/ (apache2/mysql symlinks)
                 # ADDED: nobrl to prevent write errors due to locking conflicts on some kernels
                 log_echo "[$(date "+%d.%m.%Y %H:%M:%S")] - $MSG_MOUNT_MODE_SIMPLE"
-                STATUS=$(sudo mount -t cifs "//$NAS_IP/$NAS_SHARE" "$BACKUP_PATH" -o username="$NAS_USER",password="$NAS_PASS",vers=3.0,iocharset=utf8,mfsymlinks,nobrl 2>&1)
+                #STATUS=$(sudo mount -t cifs "//$NAS_IP/$NAS_SHARE" "$BACKUP_PATH" -o username="$NAS_USER",password="$NAS_PASS",vers=3.0,iocharset=utf8,mfsymlinks,nobrl 2>&1)
+                STATUS=$(sudo mount -t cifs "//$NAS_IP/$NAS_SHARE" "$BACKUP_PATH" -o username="$NAS_USER",password="$NAS_PASS",vers=3.0,iocharset=utf8,mfsymlinks,nobrl,file_mode=0777,dir_mode=0777 2>&1)
                 ;;
                 
             "nfs")
@@ -2173,7 +2194,8 @@ while [ $CURRENT_ATTEMPT -lt $MAX_ATTEMPTS ] && [ $MOUNT_SUCCESS -eq 0 ]; do
             *)
                 # cifs_optimized - Bad (no) dedup stats, but slightly faster. Ino is calculated by the client, not by NAS. Shorter wait time.
                 log_echo "[$(date "+%d.%m.%Y %H:%M:%S")] - $MSG_MOUNT_MODE_OPT"
-                STATUS=$(sudo mount -t cifs "//$NAS_IP/$NAS_SHARE" "$BACKUP_PATH" -o username="$NAS_USER",password="$NAS_PASS",vers=3.0,iocharset=utf8,mfsymlinks,nobrl,noserverino 2>&1)
+                STATUS=$(sudo mount -t cifs "//$NAS_IP/$NAS_SHARE" "$BACKUP_PATH" -o username="$NAS_USER",password="$NAS_PASS",vers=3.0,iocharset=utf8,mfsymlinks,nobrl,noserverino,file_mode=0777,dir_mode=0777 2>&1)
+                #STATUS=$(sudo mount -t cifs "//$NAS_IP/$NAS_SHARE" "$BACKUP_PATH" -o username="$NAS_USER",password="$NAS_PASS",vers=3.0,iocharset=utf8,mfsymlinks,nobrl,noserverino 2>&1)
                 ;;
         esac
         
@@ -2512,7 +2534,9 @@ copy_with_retry() {
         # NFS DETECTED!
         IS_NFS=1
         # Flags: --no-o --no-g --no-p prevents permission timeouts on NFS
-        RSYNC_OPTIONS+=" $BASE_OPTS --no-o --no-g --no-p"
+        # FIX: Force numeric permissions. Directories=777, Files=666 (rw-rw-rw-)
+        # This ensures 'Others' (which the Pi is mapped to via NFS) can ALWAYS read.
+        RSYNC_OPTIONS+=" $BASE_OPTS --no-o --no-g --no-p --chmod=D777,F666"
     else
         # SMB / LOCAL / CIFS
         # FIX FOR DEDUPLICATION AND ERRORS ON CIFS:
@@ -2905,6 +2929,157 @@ log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_COPY_ERRORS_COUNT" "$C
 log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_NEW_DIRS_COUNT" "$BACKUP_DIR_COUNT")"
 log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_TOTAL_SIZE" "$BACKUP_SIZE_HUMAN")"
 log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_DURATION" "$DURATION" "$DURATION_MIN")"
+
+
+# =========================================================================
+# CLOUD BACKUP MODULE (RCLONE)
+# =========================================================================
+
+if [ "${CLOUD_BACKUP:-0}" -eq 1 ]; then
+    # Define Logfile Path (Load from Config or default to Home)
+    # FOR DOCKER: Set CLOUD_LOG_FILE="/config/rclone_last_run.log" in bmus.conf
+    CURRENT_LOG_FILE="${CLOUD_LOG_FILE:-$HOME_PI/rclone_last_run.log}"
+
+    log_echo "---------------------------------------------------------------------"
+    # Added timestamp
+    log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$CLOUD_MSG_START" "$CLOUD_REMOTE")"
+
+    # -----------------------------------------------------
+    # 1. Security Check: Does the remote name exist?
+    # -----------------------------------------------------
+    if ! rclone listremotes 2>/dev/null | grep -q "^${CLOUD_REMOTE}:"; then
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$CLOUD_ERR_REMOTE_NOT_FOUND" "$CLOUD_REMOTE")"
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_INFO_CONFIG_HINT_1"
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_INFO_CONFIG_HINT_2"
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_INFO_CONFIG_HINT_3"
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_INFO_AVAILABLE_REMOTES"
+        rclone listremotes | sed 's/^/        - /' 
+        CLOUD_STATUS="ERROR_CONFIG"
+    else
+        # -----------------------------------------------------
+        # 2. Define Source Path
+        # -----------------------------------------------------
+        if [ "$BACKUP_ENCRYPTION" -eq 1 ]; then
+            CLOUD_SOURCE="$ENCRYPTION_CIPHERTEXT_DIR"
+            if [ -z "$CLOUD_SOURCE" ]; then CLOUD_SOURCE="$BACKUP_PATH/encrypted"; fi
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$CLOUD_INFO_MODE_ENCRYPTED" "$CLOUD_REMOTE")"
+        else
+            CLOUD_SOURCE="$BACKUP_PATH"
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$CLOUD_INFO_MODE_STANDARD" "$CLOUD_REMOTE")"
+
+            if [ "${DEDUP_ENABLE:-0}" -eq 1 ]; then
+                log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_INFO_DEDUP_ACTIVE"
+                log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_INFO_DEDUP_STRATEGY"
+                log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_INFO_DEDUP_HINT"
+            fi
+        fi
+
+        # -----------------------------------------------------
+        # [NEW] PRE-FLIGHT CHECKS & PROTOCOL SWITCH
+        # -----------------------------------------------------
+        
+        # A. Delete old log file (Clean Start) using variable
+        if [ -f "$CURRENT_LOG_FILE" ]; then
+            rm -f "$CURRENT_LOG_FILE"
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_LOG_CLEANED"
+        fi
+
+        # B. INTELLIGENT PROTOCOL SWITCH (NFS -> SMB)
+        if [ "${NAS_MOUNT_MODE:-cifs_simple}" = "nfs" ]; then
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_NFS_TO_SMB_HINT" 
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_NFS_SWITCH_START"
+            
+            # Determine actual mount root
+            REAL_MOUNT_POINT=$(df --output=target "$BACKUP_PATH" 2>/dev/null | tail -n 1)
+            
+            if [ -z "$REAL_MOUNT_POINT" ] || [ "$REAL_MOUNT_POINT" = "/" ]; then
+                REAL_MOUNT_POINT="${DASHBOARD_BASE_PATH:-/mnt/workstation}"
+            fi
+
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_TARGET_MOUNT_POINT" "$REAL_MOUNT_POINT")"
+
+            # Unmount NFS
+            sudo umount "$REAL_MOUNT_POINT"
+            
+            if [ $? -eq 0 ]; then
+                 # Mount CIFS
+                 sudo mount -t cifs "//$NAS_IP/$NAS_SHARE" "$REAL_MOUNT_POINT" -o username="$NAS_USER",password="$NAS_PASS",vers=3.0,iocharset=utf8,mfsymlinks,nobrl,file_mode=0777,dir_mode=0777 2>&1
+                 
+                 if [ $? -eq 0 ]; then
+                     log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_SWITCH_SUCCESS"
+                 else
+                     log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $ERR_SWITCH_FAILED"
+                     # Fallback: Restore NFS
+                     sudo mount -t nfs "$NAS_IP:$NAS_SHARE_NFS" "$REAL_MOUNT_POINT" -o vers=3,proto=tcp,nolock,async,noatime,nodiratime,actimeo=600,lookupcache=all,rsize=131072,wsize=131072,timeo=600,retrans=2 2>&1
+                 fi
+            else
+                 log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$WARN_UMOUNT_FAILED" "$REAL_MOUNT_POINT")"
+            fi
+        fi
+
+        # -----------------------------------------------------
+        # 3. Start Synchronization
+        # -----------------------------------------------------
+        
+        # --- PREPARE EXCLUDES FROM CONFIG ---
+        # We create a temporary file containing the excludes from bmus.conf
+        # to pass them cleanly to rclone via --exclude-from
+        RCLONE_FILTER_FILE="/tmp/bmus_rclone_excludes_$$.txt"
+        
+        # Empty file/Create new
+        > "$RCLONE_FILTER_FILE"
+        
+        # Check if EXCLUDE_ITEMS array exists and loop through it
+        if [ ${#EXCLUDE_ITEMS[@]} -gt 0 ]; then
+            for item in "${EXCLUDE_ITEMS[@]}"; do
+                echo "$item" >> "$RCLONE_FILTER_FILE"
+            done
+        fi
+
+        if [ "$DRY_RUN" -eq 1 ] && [ "${CLOUD_DRY_RUN_CHECK:-1}" -eq 1 ]; then
+            # Added timestamps for dry run
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_MSG_DRY_RUN"
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$CLOUD_MSG_DRY_RUN_CMD" "$CLOUD_SOURCE" "$CLOUD_REMOTE" "$CLOUD_TARGET_PATH")"
+            CLOUD_STATUS="SKIPPED_DRYRUN"
+        else
+            # Added timestamps for upload start
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$CLOUD_MSG_UPLOAD_START" "$CLOUD_REMOTE" "$CLOUD_TARGET_PATH")"
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_MSG_WAIT"
+
+            # UPDATED RCLONE COMMAND:
+            # Using --exclude-from to read the dynamic list from config
+            rclone sync "$CLOUD_SOURCE" "$CLOUD_REMOTE:$CLOUD_TARGET_PATH" \
+                --transfers 4 \
+                --fast-list \
+                --update \
+                --delete-after \
+                --exclude-from "$RCLONE_FILTER_FILE" \
+                -L \
+                --log-file="$CURRENT_LOG_FILE" \
+                --log-level INFO
+
+            RCLONE_EXIT=$?
+            
+            # Clean up temp filter file
+            rm -f "$RCLONE_FILTER_FILE"
+
+            if [ $RCLONE_EXIT -eq 0 ]; then
+                log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_MSG_SUCCESS"
+                CLOUD_STATUS="SUCCESS"
+            else
+                if grep -q -iE "quota exceeded|disk full|insufficient space|no space left" "$CURRENT_LOG_FILE"; then
+                    log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $CLOUD_ERR_QUOTA"
+                    CLOUD_STATUS="ERROR_SPACE"
+                else
+                    log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$CLOUD_ERR_UPLOAD_FAILED" "$RCLONE_EXIT")"
+                    CLOUD_STATUS="ERROR_UPLOAD"
+                fi
+            fi
+        fi
+    fi
+    log_echo "---------------------------------------------------------------------"
+fi
+
 
 # ===== [ Write detailed file log ] =====
 if [ "${WRITE_DETAILED_FILELOG:-0}" -eq 1 ]; then
@@ -3318,7 +3493,7 @@ if [ "${DASHBOARD_ENABLE:-0}" -eq 1 ]; then
                 fi
                 
                 
-                generate_dashboard "$OUTPUT_HTML" "$BACKUP_SIZE_HUMAN" "$BACKUP_FILE_COUNT" "$BACKUP_DIR_COUNT" "$DASHBOARD_DISPLAY_PATH" "$NAS_IP" "$MASTER_IP" "$TOTAL_DELETED_COUNT" "$COPY_ERRORS" "$VERIFY_ERRORS" "$START" "$END" "$DURATION" "$LOGFILE" "$DEDUP_LOGFILE" "$DELETED_FOLDERS" "$KEPT_FOLDERS" "$RESOURCE_LOGFILE" "$RAM_TOTAL_MB" "$DEDUP_SAVED_HUMAN" "$AVG_DURATION_HUMAN" "$SUCCESS_RATE_DISPLAY" "$MAX_SPIKE_HUMAN" "${DASHBOARD_LINE_NEW_DIRS:-100}" "$TOTAL_BACKUP_BYTES" "${BACKUP_AGE_DAYS:-0}" "${ENCRYPTED_BACKUP_AGE_DAYS:-0}"
+                generate_dashboard "$OUTPUT_HTML" "$BACKUP_SIZE_HUMAN" "$BACKUP_FILE_COUNT" "$BACKUP_DIR_COUNT" "$DASHBOARD_DISPLAY_PATH" "$NAS_IP" "$MASTER_IP" "$TOTAL_DELETED_COUNT" "$COPY_ERRORS" "$VERIFY_ERRORS" "$START" "$END" "$DURATION" "$LOGFILE" "$DEDUP_LOGFILE" "$DELETED_FOLDERS" "$KEPT_FOLDERS" "$RESOURCE_LOGFILE" "$RAM_TOTAL_MB" "$DEDUP_SAVED_HUMAN" "$AVG_DURATION_HUMAN" "$SUCCESS_RATE_DISPLAY" "$MAX_SPIKE_HUMAN" "${DASHBOARD_LINE_NEW_DIRS:-100}" "$TOTAL_BACKUP_BYTES" "${BACKUP_AGE_DAYS:-0}" "${ENCRYPTED_BACKUP_AGE_DAYS:-0}" "${CLOUD_BACKUP:-0}" "${CLOUD_STATUS:-}"
                 # ===== [ End Dashboard call ] =====
                 
                 
@@ -3552,6 +3727,7 @@ fi
         # Optional: log cleanup, kept silent to avoid log clutter
     fi
 
+
 # --- [ ENCRYPTION: Unmount encrypted filesystem ] ---
 if [ "$BACKUP_ENCRYPTION" -eq 1 ]; then
     log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $ENC_LOG_FINALIZING"
@@ -3585,6 +3761,9 @@ else
         log_echo "[$(date "+%d.%m.%Y %H:%M:%S")] - $(printf "$MSG_UMOUNT_SUCCESS_FINAL" "$UNMOUNT_PATH")"
     fi
 fi
+
+
+
 
 log_echo "[$(date "+%d.%m.%Y %H:%M:%S")] - $MSG_BACKUP_END"
 
