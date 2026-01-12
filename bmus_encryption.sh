@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =========================================================================
-# Encryption Functions for BmuS v.24.3
+# Encryption Functions for BmuS v.24.4
 # =========================================================================
 # This file provides encryption functionality using gocryptfs
 # All user-facing messages use variables from language files
@@ -160,6 +160,10 @@ mount_encrypted_filesystem() {
         fi
     fi
     
+if [ ! -s "$ENCRYPTION_PASSWORD_FILE" ]; then
+    log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$ERR_ENC_PASS_FILE_EMPTY" "$ENCRYPTION_PASSWORD_FILE")"
+    return 1
+fi
 # Mount with password from file
 log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $ENC_INFO_MOUNT_PROCESS_START"
 
