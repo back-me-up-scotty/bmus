@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.3
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.4
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
@@ -104,6 +104,58 @@ log_echo() {
     echo -e "$msg" >> "$LOGFILE"
     MAIL_BODY+="$msg"$'\n'
 }
+
+# --- [ Clean Separation of Handler and Cleanup ] ----------------
+
+# 1. Cleanup Function (Silent & Technical)
+# This ONLY cleans up resources. It assumes any user messages
+# have already been printed by the interrupt handler or normal script flow.
+cleanup() {
+    # Unmount encrypted filesystem if mounted
+    if type umount_encrypted_filesystem >/dev/null 2>&1; then
+        if [ -n "${ENCRYPTION_PLAINTEXT_MOUNT:-}" ]; then
+            if mountpoint -q "$ENCRYPTION_PLAINTEXT_MOUNT"; then
+                umount_encrypted_filesystem "$ENCRYPTION_PLAINTEXT_MOUNT"
+            fi
+        fi
+    fi
+
+    # Unmount NAS/Backup path
+    if [ -n "${UNMOUNT_PATH:-}" ]; then
+        if mountpoint -q "$UNMOUNT_PATH"; then
+             sudo umount -l "$UNMOUNT_PATH" 2>/dev/null
+        fi
+    fi
+    
+    # Remove temp files
+    rm -f "${BACKUP_PATH}/.bmus_lock" 2>/dev/null
+    rm -f /tmp/bmus_*.tmp 2>/dev/null
+}
+
+# 2. Interrupt Handler (Visible & Loud)
+# This is ONLY called when CTRL+C is pressed.
+ctrl_c_handler() {
+    # TRICK: Use \r (Carriage Return) to ensure we are at the start of the line
+    # regardless of where rsync left the cursor.
+    echo -e "\r\n\n$WARN_SCRIPT_INTERRUPTED\n" >&2
+    
+    # Log to file
+    if [ -n "$LOGFILE" ] && [ -f "$LOGFILE" ]; then
+        echo "$(date '+%d.%m.%Y %H:%M:%S') - $WARN_SCRIPT_INTERRUPTED" >> "$LOGFILE"
+    fi
+    
+    # Exit with Error (This will trigger the EXIT trap below to run cleanup)
+    exit 1
+}
+
+# Trap INT (Ctrl+C) and TERM -> Call the specific Handler
+trap ctrl_c_handler INT TERM
+
+# Trap EXIT -> Always run cleanup
+trap cleanup EXIT
+
+# -------------------------------------------------------------------------
+
 
 # -------------------------------------------------------------------------
 # === [ NAS REACHABILITY CHECK FUNCTION ] ===
@@ -1312,6 +1364,8 @@ collect_resource_stats() {
         echo "$ts,$ram_used,$cpu_load,$io_wait" >> "$logfile"
     done
 }
+
+
 # =========================================================================
 # === [ MODIFIED END: Resource Monitoring Function (Robust) ] ===
 # =========================================================================
@@ -2089,10 +2143,7 @@ else
     exit 1
 fi
 
-
-
 START=$(date +%s)
-
 
 # =========================================================================
 # === [ MODIFIED START: Start Resource Monitor ] ===
@@ -2104,14 +2155,37 @@ if [ "${RESOURCE_MONITOR_ENABLE:-0}" -eq 1 ]; then
     RESOURCE_MONITOR_PID=$!
 fi
 
-
 # -------------------------------------------------------------------------
 # === [ NAS REACHABILITY CHECK WITH RETRY ] ===
 # -------------------------------------------------------------------------
 # Check NAS reachability with configurable retry logic
+
+# --- [ Safety check for local backups ] ---------------------------
+# If NAS_IP is empty, BmuS assumes a local path. 
+# We warn if that path is not a mountpoint to prevent writing to SD card.
+if [ -z "$NAS_IP" ]; then
+    # Check if BACKUP_PATH is a mountpoint
+    if ! mountpoint -q "$BACKUP_PATH" 2>/dev/null; then
+        # Output to Console (with empty lines for visibility)
+        echo ""
+        echo "$(printf "$WARN_LOCAL_BACKUP_NO_MOUNT" "$BACKUP_PATH")"
+        echo ""
+        
+        # Output to Logfile
+        log_echo "$(printf "$WARN_LOCAL_BACKUP_NO_MOUNT" "$BACKUP_PATH")"
+        
+        # Wait 5 seconds so the user sees the warning in manual mode
+        sleep 5
+    fi
+fi
+# -------------------------------------------------------------------------
+
+# Check NAS reachability with configurable retry logic
 if ! check_nas_reachability "$NAS_IP"; then
     exit 1
 fi
+
+# Prepare mount point
 
 # Prepare mount point
 if [ ! -d "$BACKUP_PATH" ]; then
