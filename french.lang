@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.26.3) - FRENCH
+# Language File for BmuS - Backu Me Up Scotty (v.26.4) - FRENCH
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -42,6 +42,7 @@ ERR_DASHBOARD_FUNC_MISSING_FINAL="ERREUR : Fonction generate_dashboard introuvab
 ERR_DASHBOARD_GEN_NOT_FOUND="[ERREUR] Générateur de tableau de bord INTROUVABLE : %s"
 ERR_DASHBOARD_NAS_FAIL="ATTENTION : Impossible de copier le tableau de bord sur le NAS"
 ERR_DASHBOARD_NOT_FOUND_FINAL="ERREUR : Générateur de tableau de bord introuvable : %s"
+ERR_ENC_PASS_FILE_EMPTY="ERREUR : Le fichier de mot de passe est vide ou n\'existe pas : %s"
 ERR_INSTALL_MISSING="INSTALLATION DES PAQUETS MANQUANTS :"
 ERR_INSTALL_PACKAGES="Veuillez installer les paquets manquants et redémarrer le script."
 ERR_LOG_ZIP_FAILED="ERREUR : Impossible de compresser le fichier journal"
@@ -91,6 +92,7 @@ WARN_DASHBOARD_NOT_EXECUTABLE="[WARN] Le générateur de tableau de bord n\'est 
 WARN_HISTORY_MANUAL_CHANGE="Veuillez changer manuellement : FIRST_CHECK=0"
 WARN_HISTORY_NO_WRITE_PERMS="Pas de droits d\'écriture sur %s"
 WARN_HISTORY_ROTATION_FAIL="ATTENTION : Impossible de désactiver automatiquement FIRST_CHECK"
+WARN_LOCAL_BACKUP_NO_MOUNT="[WARN] Sauvegarde locale détectée (NAS_IP vide), mais '%s' n\'est pas un point de montage ! Les données seront écrites sur la partition système."
 WARN_NET_IFACE_RESET="ATTENTION : Timeout RSYNC détecté. Démarrage de la réinitialisation de l\'interface pour %s..."
 WARN_OPTIMIZATION_POTENTIAL="Le système peut effectuer des sauvegardes, mais il y a un potentiel d\'optimisation."
 WARN_PING_CONTINUE_ANYWAY="⚠️  Poursuite de la sauvegarde malgré tout (IGNORE_FAILED_PING=1)"
@@ -100,10 +102,12 @@ WARN_PERMS_HINT="          Veuillez exécuter : chmod 600 %s"
 WARN_PERMS_WRONG="[WARN] Permissions : %s (recommandé : 600)"
 WARN_REVIEW_WARNINGS="Veuillez vérifier les avertissements ci-dessus."
 WARN_SCRIPT_FILE_NOT_FOUND="ATTENTION : Fichier système introuvable : %s"
+WARN_SCRIPT_INTERRUPTED="[WARN] Script interrompu par l’utilisateur (CTRL+C). Arrêt..."
 WARN_SQL_CREDS_MISSING="ATTENTION : MYSQL_USER ou MYSQL_PASS non défini dans %s"
 WARN_SRC_NOT_EXIST="WARN : %s n\'existe pas, ignoré"
 WARN_SUDO_CONFIG_PASSLESS="          Recommandation : Configurer sudoers pour un accès sans mot de passe"
 WARN_SUDO_PASSWORD="[WARN] sudo : Disponible (avec mot de passe)"
+WARN_UMOUNT_FAILED="[WARN] Impossible de démonter NFS (%s). Poursuite en mode NFS."
 WARN_WARNINGS_FOUND="ATTENTION : %s avertissement(s) trouvé(s)"
 
 # --- [ INFORMATION/STATUS (MSG_) ] ---------------------------------------
@@ -690,5 +694,3 @@ MSG_NFS_SWITCH_START="[INFO] NFS détecté. Passage à SMB (CIFS) pour la compat
 MSG_NFS_TO_SMB_HINT="[NOTE] Mode NFS actif. Passage temporaire à SMB pour la sauvegarde cloud afin d’éviter les erreurs de permissions."
 MSG_SWITCH_SUCCESS="[SUCCESS] Changement de protocole réussi. Accès aux fichiers via SMB (0777)."
 MSG_TARGET_MOUNT_POINT="[INFO] Point de montage cible déterminé : %s"
-
-WARN_UMOUNT_FAILED="[WARN] Impossible de démonter NFS (%s). Poursuite en mode NFS."
