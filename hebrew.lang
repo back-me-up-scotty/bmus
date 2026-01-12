@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.26.3) - HEBREW
+# Language File for BmuS - Backu Me Up Scotty (v.26.4) - HEBREW
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -42,6 +42,7 @@ ERR_DASHBOARD_FUNC_MISSING_FINAL="שגיאה: הפונקציה generate_dashboar
 ERR_DASHBOARD_GEN_NOT_FOUND="[שגיאה] מחולל הדאשבורד לא נמצא: %s"
 ERR_DASHBOARD_NAS_FAIL="אזהרה: לא ניתן היה להעתיק את הדאשבורד ל-NAS"
 ERR_DASHBOARD_NOT_FOUND_FINAL="שגיאה: מחולל הדאשבורד לא נמצא: %s"
+ERR_ENC_PASS_FILE_EMPTY="שגיאה: קובץ הסיסמה ריק או אינו קיים: %s"
 ERR_INSTALL_MISSING="התקנת חבילות חסרות:"
 ERR_INSTALL_PACKAGES="נא להתקין את החבילות החסרות ולהפעיל את הסקריפט מחדש."
 ERR_LOG_ZIP_FAILED="שגיאה: לא ניתן היה לדחוס (Zip) את קובץ הלוג"
@@ -91,6 +92,7 @@ WARN_DASHBOARD_NOT_EXECUTABLE="[אזהרה] מחולל הדאשבורד אינו
 WARN_HISTORY_MANUAL_CHANGE="נא לשנות ידנית: FIRST_CHECK=0"
 WARN_HISTORY_NO_WRITE_PERMS="אין הרשאות כתיבה על %s"
 WARN_HISTORY_ROTATION_FAIL="אזהרה: לא ניתן היה לבטל אוטומטית את FIRST_CHECK"
+WARN_LOCAL_BACKUP_NO_MOUNT="[אזהרה] זוהה גיבוי מקומי (NAS_IP ריק), אך '%s' אינו נקודת עיגון! הנתונים ייכתבו למחיצת המערכת."
 WARN_NET_IFACE_RESET="אזהרה: זוהה Timeout ב-RSYNC. מתחיל איפוס ממשק עבור %s..."
 WARN_OPTIMIZATION_POTENTIAL="המערכת יכולה לבצע גיבויים, אך קיים פוטנציאל לאופטימיזציה."
 WARN_PING_CONTINUE_ANYWAY="⚠️  ממשיך בגיבוי בכל זאת (IGNORE_FAILED_PING=1)"
@@ -100,10 +102,12 @@ WARN_PERMS_HINT="          נא להריץ: chmod 600 %s"
 WARN_PERMS_WRONG="[אזהרה] הרשאות: %s (מומלץ: 600)"
 WARN_REVIEW_WARNINGS="נא לבדוק את האזהרות לעיל."
 WARN_SCRIPT_FILE_NOT_FOUND="אזהרה: קובץ מערכת לא נמצא: %s"
+WARN_SCRIPT_INTERRUPTED="[אזהרה] הסקריפט הופסק על ידי המשתמש (CTRL+C). מסיים..."
 WARN_SQL_CREDS_MISSING="אזהרה: MYSQL_USER או MYSQL_PASS לא הוגדרו ב-%s"
 WARN_SRC_NOT_EXIST="אזהרה: %s לא קיים, מדלג"
 WARN_SUDO_CONFIG_PASSLESS="          המלצה: להגדיר sudoers לגישה ללא סיסמה"
 WARN_SUDO_PASSWORD="[אזהרה] sudo: זמין (עם סיסמה)"
+WARN_UMOUNT_FAILED="[WARN] לא ניתן לנתק NFS (%s). ממשיך במצב NFS."
 WARN_WARNINGS_FOUND="שים לב: נמצאו %s אזהרות"
 
 # --- [ INFORMATION/STATUS (MSG_) ] ---------------------------------------
@@ -690,6 +694,4 @@ MSG_LOG_CLEANED="[INFO] יומן rclone ישן נמחק."
 MSG_NFS_SWITCH_START="[INFO] זוהה NFS. מעבר ל-SMB (CIFS) לצורך תאימות לענן..."
 MSG_NFS_TO_SMB_HINT="[NOTE] מצב NFS פעיל. מעבר זמני ל-SMB כדי למנוע שגיאות הרשאה."
 MSG_SWITCH_SUCCESS="[SUCCESS] החלפת פרוטוקול הצליחה. גישה לקבצים דרך SMB (0777)."
-MSG_TARGET_MOUNT_POINT="[INFO] נקודת עיגון יעד נקבעה: %s" d
-
-WARN_UMOUNT_FAILED="[WARN] לא ניתן לנתק NFS (%s). ממשיך במצב NFS."
+MSG_TARGET_MOUNT_POINT="[INFO] נקודת עיגון יעד נקבעה: %s"
