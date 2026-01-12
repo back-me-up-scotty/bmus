@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.26.3) - ENGLISH
+# Language File for BmuS - Backu Me Up Scotty (v.26.4) - ENGLISH
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -42,6 +42,7 @@ ERR_DASHBOARD_FUNC_MISSING_FINAL="ERROR: Function generate_dashboard not found i
 ERR_DASHBOARD_GEN_NOT_FOUND="[ERROR] Dashboard generator NOT FOUND: %s"
 ERR_DASHBOARD_NAS_FAIL="WARNING: Could not copy dashboard to NAS"
 ERR_DASHBOARD_NOT_FOUND_FINAL="ERROR: Dashboard generator not found: %s"
+ERR_ENC_PASS_FILE_EMPTY="ERROR: Password file is empty or missing: %s"
 ERR_INSTALL_MISSING="INSTALLATION OF MISSING PACKAGES:"
 ERR_INSTALL_PACKAGES="Please install the missing packages and restart the script."
 ERR_LOG_ZIP_FAILED="ERROR: Could not zip logfile"
@@ -91,6 +92,7 @@ WARN_DASHBOARD_NOT_EXECUTABLE="[WARN] Dashboard generator not executable"
 WARN_HISTORY_MANUAL_CHANGE="Please change manually: FIRST_CHECK=0"
 WARN_HISTORY_NO_WRITE_PERMS="No write permissions on %s"
 WARN_HISTORY_ROTATION_FAIL="WARNING: Could not automatically deactivate FIRST_CHECK"
+WARN_LOCAL_BACKUP_NO_MOUNT="[WARNING] Local backup detected (NAS_IP empty), but '%s' is not a mountpoint! Writing to system partition."
 WARN_NET_IFACE_RESET="WARNING: RSYNC timeout detected. Starting interface reset for %s..."
 WARN_OPTIMIZATION_POTENTIAL="The system can perform backups, but there is potential for optimization."
 WARN_PING_CONTINUE_ANYWAY="⚠️  Continuing with backup anyway (IGNORE_FAILED_PING=1)"
@@ -100,10 +102,12 @@ WARN_PERMS_HINT="          Please run: chmod 600 %s"
 WARN_PERMS_WRONG="[WARN] Permissions: %s (recommended: 600)"
 WARN_REVIEW_WARNINGS="Please review the warnings above."
 WARN_SCRIPT_FILE_NOT_FOUND="WARNING: System file not found: %s"
+WARN_SCRIPT_INTERRUPTED="[WARNING] Script interrupted by user (CTRL+C). Exiting..."
 WARN_SQL_CREDS_MISSING="WARNING: MYSQL_USER or MYSQL_PASS not set in %s"
 WARN_SRC_NOT_EXIST="WARN: %s does not exist, skipping"
 WARN_SUDO_CONFIG_PASSLESS="          Recommendation: Configure sudoers for passwordless access"
 WARN_SUDO_PASSWORD="[WARN] sudo: Available (with password)"
+WARN_UMOUNT_FAILED="[WARN] Could not unmount NFS (%s). Proceeding with NFS."
 WARN_WARNINGS_FOUND="ATTENTION: %s warning(s) found"
 
 # --- [ INFORMATION/STATUS (MSG_) ] ---------------------------------------
@@ -242,6 +246,7 @@ MSG_SYSTEM_READY="The system is fully configured and ready for backups."
 MSG_TMP_DASH_DEL="Temporary dashboard copy deleted: %s"
 MSG_TMP_ZIP_DEL="Temporary ZIP deleted: %s"
 MSG_TOTAL_SIZE="Total size of today's backup: %s"
+MSG_TRAP_CLEANUP="[INFO] Signal received or script exit. Performing cleanup..."
 MSG_UMOUNT_SUCCESS="Umount successful"
 MSG_UMOUNT_SUCCESS_FINAL="umount %s successful"
 MSG_UNKNOWN_PARAM="Unknown parameter: %s"
@@ -690,5 +695,3 @@ MSG_NFS_SWITCH_START="[INFO] NFS detected. Switching to SMB (CIFS) for Cloud Upl
 MSG_NFS_TO_SMB_HINT="[NOTE] NFS mode active. Switching temporarily to SMB for cloud backup to avoid permission errors."
 MSG_SWITCH_SUCCESS="[SUCCESS] Protocol switch successful. Accessing files via SMB (0777)."
 MSG_TARGET_MOUNT_POINT="[INFO] Target Mount Point determined: %s"
-
-WARN_UMOUNT_FAILED="[WARN] Could not unmount NFS (%s). Proceeding with NFS."
