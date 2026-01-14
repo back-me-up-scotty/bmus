@@ -39,6 +39,13 @@ https://www.back-me-up-scotty.com/docs/what-is-bmus/
 Visit the [Quick Start Guide](https://www.back-me-up-scotty.com/docs/quick-start-guide-native-mac-win-docker/) and 
 the FAQ on our Website to learn how to install Docker and Bmus on a [Mac](https://www.back-me-up-scotty.com/faq/can-i-backup-my-mac/) or [Windows](https://www.back-me-up-scotty.com/faq/can-i-backup-windows/).
 
+**Tutorial video click here:**
+
+In this video, you learn how to use BmuS to back up a Synology folder to a Ugreen NAS. The configuration is similar 
+for other sources or destinations. So it doesn't matter whether you're backing up from a Mac to a NAS or from a 
+Windows system to a NAS.
+
+[![BmuS on Youtube](https://img.youtube.com/vi/ksfYJlpqfCw/0.jpg)](https://www.youtube.com/watch?v=ksfYJlpqfCw)
 
 **Features**
 
