@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.26.4) - ENGLISH
+# Language File for BmuS - Backu Me Up Scotty (v.26.6) - ENGLISH
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -348,6 +348,9 @@ CHART_TITLE_STATUS_OVERVIEW="Result Overview"
 CHART_TITLE_WEEKDAY_ANALYSIS="Weekday Analysis"
 CHART_TOOLTIP_SCATTER="Size: %s MB, Duration: %s sec"
 CHART_WEEKDAY_NAMES='["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]'
+CHART_AXIS_RAM_MB="RAM (MB)"
+CHART_AXIS_CPU_IO="CPU / IO %"
+CHART_AXIS_MEGABYTE="Megabyte (MB)"
 CHART_YAXIS_FILES="Number of Files"
 CHART_YAXIS_SEC="Seconds"
 CHART_YAXIS_TITLE_DURATION_SEC="Duration (Sec)"
@@ -695,3 +698,18 @@ MSG_NFS_SWITCH_START="[INFO] NFS detected. Switching to SMB (CIFS) for Cloud Upl
 MSG_NFS_TO_SMB_HINT="[NOTE] NFS mode active. Switching temporarily to SMB for cloud backup to avoid permission errors."
 MSG_SWITCH_SUCCESS="[SUCCESS] Protocol switch successful. Accessing files via SMB (0777)."
 MSG_TARGET_MOUNT_POINT="[INFO] Target Mount Point determined: %s"
+
+MSG_RCLONE_INFO_PERSISTENT="[INFO] Using custom rclone config: %s"
+MSG_RCLONE_INFO_IMPORTED="[INFO] Internal rclone config imported to custom path: %s"
+MSG_RCLONE_WARN_NOTFOUND="[WARN] Custom rclone config defined (%s) but file not found (and no internal config to import)."
+MSG_RCLONE_WARN_EMPTY="[WARN] Custom rclone config (%s) is empty! Ignoring."
+MSG_RCLONE_DRY_IMPORT="[DRY-RUN] Would create directory and import internal config to: %s"
+
+
+# --- [ SMART RETENTION ] ---
+MSG_RETENTION_ACTIVE="[INFO] Smart Retention (GFS) is active."
+MSG_RETENTION_TAG_WEEKLY="[RETENTION] Tagging current backup as WEEKLY archive (Sunday)."
+MSG_RETENTION_TAG_MONTHLY="[RETENTION] Tagging current backup as MONTHLY archive (1st of Month)."
+MSG_RETENTION_DELETE="[DELETE] Expired (No matching retention rule): %s"
+CHART_TOOLTIP_MONTHLY=" | Status: Monthly (Kept)"
+CHART_TOOLTIP_WEEKLY=" | Status: Weekly (Kept)"
