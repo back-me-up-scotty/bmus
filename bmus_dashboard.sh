@@ -1,5 +1,5 @@
 #!/bin/bash
-# Dashboard Generator v.25.0
+# Dashboard Generator v.25.1
 # This script generates the dashboard with Dark/Light mode support.
 
 generate_dashboard() {
@@ -448,7 +448,7 @@ generate_dashboard() {
         }
 
         a.donate-link {
-        color: var(--text-heading) !important;   /* im Light Mode schwarz, im Dark Mode weiß */
+        color: var(--text-heading) !important;   /* Black in Light mode, white in Dark mode */
         text-decoration: none;
         font-weight: 600;
         }
@@ -632,6 +632,7 @@ EOF
     sed -i "s|END_HUMAN_PLACEHOLDER|$end_human|g" "$out"
     sed -i "s|DURATION_S_PLACEHOLDER|$duration_s|g" "$out"
     sed -i "s|GENERATED_AT_PLACEHOLDER|$(date '+%d.%m.%Y %H:%M:%S')|g" "$out"
-    sed -i "s|CLOUD_WIDGET_PLACEHOLDER|$CLOUD_WIDGET_HTML|g" "$out"
+    # Use # as delimiter for HTML content (safer)
+    sed -i "s#CLOUD_WIDGET_PLACEHOLDER#$CLOUD_WIDGET_HTML#g" "$out"
     return 0
 }
