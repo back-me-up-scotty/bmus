@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.4
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.6
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
@@ -60,8 +60,6 @@
 #  The author takes no responsibility for damage resulting from the use of the script. 
 #  By using it, you acknowledge this.
 # -------------------------------------------------------------------------
-# Load configuration file. Change this to your home directory or 
-# wherever bmus is stored.
 #
 # -------------------------------------------------------------------------
 # PATH DETECTION (UNIVERSAL MODE)
@@ -104,6 +102,7 @@ log_echo() {
     echo -e "$msg" >> "$LOGFILE"
     MAIL_BODY+="$msg"$'\n'
 }
+
 
 # --- [ Clean Separation of Handler and Cleanup ] ----------------
 
@@ -155,7 +154,38 @@ trap ctrl_c_handler INT TERM
 trap cleanup EXIT
 
 # -------------------------------------------------------------------------
+# --- [ Smart Retention Tagging ] ------------------------------------
+# Checks the current date and places marker files (tags) into the backup
+# folder if it qualifies as a weekly (Sunday) or monthly (1st) backup.
+apply_smart_retention_tags() {
+    local target_dir="$1"
+    
+    # Only run if enabled
+    if [ "${RETENTION_ENABLE:-0}" -ne 1 ]; then
+        return 0
+    fi
+    
+    # Verify target exists
+    if [ ! -d "$target_dir" ]; then
+        return 0
+    fi
 
+    local day_of_month=$(date +%d)
+    local day_of_week=$(date +%u) # 1=Monday, 7=Sunday
+
+    # Monthly Tag (1st of Month)
+    if [ "$day_of_month" -eq "01" ]; then
+        touch "$target_dir/_RETENTION_MONTHLY_KEEP.txt"
+        log_echo "$MSG_RETENTION_TAG_MONTHLY"
+    fi
+
+    # Weekly Tag (Sunday)
+    if [ "$day_of_week" -eq "7" ]; then
+        touch "$target_dir/_RETENTION_WEEKLY_KEEP.txt"
+        log_echo "$MSG_RETENTION_TAG_WEEKLY"
+    fi
+}
+# -------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------
 # === [ NAS REACHABILITY CHECK FUNCTION ] ===
@@ -230,6 +260,8 @@ else
 fi
 
 source "$LANG_FILE"
+
+
 
 
 # =========================================================================
@@ -1035,9 +1067,94 @@ cleanup_old_encrypted_backups() {
     local max_age_days="${ENCRYPTED_BACKUP_AGE_DAYS:-0}"
     local use_date_folders="${BACKUP_USE_DATE_FOLDERS:-0}"
     local readable_names="${READABLE_NAMES:-0}"
-    # --- [ FIX: Variable dedup_enabled definieren ] ---
     local dedup_enabled="${DEDUP_ENABLE:-0}"
     
+    # --- [ SMART RETENTION INJECTION (Encrypted) ] ---
+    # Since we cannot read marker files inside encrypted folders without mounting,
+    # we must CALCULATE the retention rules based on the folder timestamp.
+    if [ "${RETENTION_ENABLE:-0}" -eq 1 ] && [ "${BACKUP_ENCRYPTION:-0}" -eq 1 ]; then
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_RETENTION_ACTIVE (Encrypted Mode)"
+        
+        local gfs_deleted_enc=0
+        local current_ts_gfs=$(date +%s)
+        
+        # Decide Pattern: Date-Folders or Generic
+        local find_pattern_gfs="*"
+        if [ "${BACKUP_USE_DATE_FOLDERS:-0}" -eq 1 ] && [ "${READABLE_NAMES:-0}" -eq 1 ]; then
+            find_pattern_gfs="[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
+        fi
+        
+        while read -r folder; do
+            [ -d "$folder" ] || continue
+            # Skip internal gocryptfs folders
+            if [[ "$(basename "$folder")" == "gocryptfs"* ]]; then continue; fi
+
+            # 1. Get Timestamp & Age
+            if date --version >/dev/null 2>&1; then
+                # Linux
+                folder_ts=$(stat -c %Y "$folder")
+                # Calculate Day of Week (1-7, 7=Sunday) and Day of Month (01-31)
+                day_w=$(date -d "@$folder_ts" +%u)
+                day_m=$(date -d "@$folder_ts" +%d)
+            else
+                # BSD/Mac
+                folder_ts=$(stat -f "%m" "$folder")
+                day_w=$(date -r "$folder_ts" +%u)
+                day_m=$(date -r "$folder_ts" +%d)
+            fi
+            
+            age_sec=$((current_ts_gfs - folder_ts))
+            age_days=$((age_sec / 86400))
+            
+            # 2. Logic: KEEP or DELETE
+            KEEP=0
+            
+            # Rule A: Daily Limit
+            if [ "$age_days" -le "${RETENTION_KEEP_DAILY:-7}" ]; then
+                KEEP=1
+            else
+                # Rule B: Monthly (Is it the 1st of Month?)
+                if [ "$day_m" -eq 1 ]; then
+                     if [ "$age_days" -le "$(( ${RETENTION_KEEP_MONTHLY:-12} * 30 ))" ]; then KEEP=1; fi
+                fi
+                
+                # Rule C: Weekly (Is it Sunday?)
+                if [ "$KEEP" -eq 0 ] && [ "$day_w" -eq 7 ]; then
+                     if [ "$age_days" -le "$(( ${RETENTION_KEEP_WEEKLY:-4} * 7 ))" ]; then KEEP=1; fi
+                fi
+            fi
+            
+            # 3. Execute
+            if [ "$KEEP" -eq 0 ]; then
+                # Count files inside folder for accurate statistics
+                local file_count=$(find "$folder" -type f 2>/dev/null | wc -l)
+                
+                if [ "${DRY_RUN:-0}" -eq 1 ]; then
+                    log_echo "[DRY-RUN] $(printf "$MSG_RETENTION_DELETE" "$(basename "$folder") ($age_days days)")"
+                    ((gfs_deleted_enc++))
+                    
+                    # Update global stats
+                    DELETED_COUNT_ENCR=$((DELETED_COUNT_ENCR + file_count))
+                    DELETED_FOLDERS=$((DELETED_FOLDERS + 1))
+                else
+                    log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_RETENTION_DELETE" "$(basename "$folder") ($age_days days)")"
+                    if rm -rf "$folder"; then 
+                        ((gfs_deleted_enc++))
+                        
+                        # Update global stats
+                        DELETED_COUNT_ENCR=$((DELETED_COUNT_ENCR + file_count))
+                        DELETED_FOLDERS=$((DELETED_FOLDERS + 1))
+                    fi
+                fi
+            fi
+            
+        done < <(find "$cipher_dir" -maxdepth 1 -type d -name "$find_pattern_gfs")
+        
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$ENC_RETENTION_DELETED_COUNT" "$gfs_deleted_enc")"
+        return 0
+    fi
+    # --- [ END: SMART RETENTION INJECTION (Encrypted) ] ---
+
     # Skip if retention is disabled
     if [ "$max_age_days" -eq 0 ]; then
         log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $ENC_RETENTION_DISABLED"
@@ -1178,7 +1295,84 @@ cleanup_old_unencrypted_backups() {
     if [ "$dedup_enabled" -eq 1 ] || [ "$use_date_folders" -eq 1 ]; then
         retention_mode="folders"
     fi
+    # --- [ SMART RETENTION INJECTION ] ---
+    # Apply tags to the CURRENT backup folder (global variable)
+    if [ -n "$BACKUP_PATH" ] && [ -d "$BACKUP_PATH" ]; then
+        apply_smart_retention_tags "$BACKUP_PATH"
+    fi
 
+    # IF Smart Retention is ENABLED, use GFS logic and then RETURN (skip legacy code)
+    if [ "${RETENTION_ENABLE:-0}" -eq 1 ]; then
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_RETENTION_ACTIVE"
+        local gfs_deleted_count=0
+        
+        # Iterate over potential backup folders
+        # Using find to get directories that look like date-backups
+        while read -r folder; do
+            [ -d "$folder" ] || continue
+            
+            # Safety: Skip current backup
+            if [ "$(basename "$folder")" == "$(basename "$BACKUP_PATH")" ]; then continue; fi
+            
+            # Determine Age
+            if date --version >/dev/null 2>&1; then
+                folder_ts=$(stat -c %Y "$folder") # Linux
+            else
+                folder_ts=$(stat -f "%m" "$folder") # BSD/Mac
+            fi
+            
+            now_ts=$(date +%s)
+            age_sec=$((now_ts - folder_ts))
+            age_days=$((age_sec / 86400))
+            
+            # Logic: KEEP or DELETE
+            KEEP=0
+            
+            # 1. Daily
+            if [ "$age_days" -le "${RETENTION_KEEP_DAILY:-7}" ]; then
+                KEEP=1
+            else
+                # 2. Monthly Tag
+                if [ -f "$folder/_RETENTION_MONTHLY_KEEP.txt" ]; then
+                    if [ "$age_days" -le "$(( ${RETENTION_KEEP_MONTHLY:-12} * 30 ))" ]; then KEEP=1; fi
+                fi
+                # 3. Weekly Tag
+                if [ "$KEEP" -eq 0 ] && [ -f "$folder/_RETENTION_WEEKLY_KEEP.txt" ]; then
+                     if [ "$age_days" -le "$(( ${RETENTION_KEEP_WEEKLY:-4} * 7 ))" ]; then KEEP=1; fi
+                fi
+            fi
+            
+           # Execute
+            if [ "$KEEP" -eq 0 ]; then
+                # Count files inside folder for accurate statistics (same as legacy logic)
+                local file_count=$(find "$folder" -type f 2>/dev/null | wc -l)
+
+                if [ "${DRY_RUN:-0}" -eq 1 ]; then
+                    log_echo "[DRY-RUN] $(printf "$MSG_RETENTION_DELETE" "$(basename "$folder") ($age_days days)")"
+                    ((gfs_deleted_count++))
+                    
+                    # Update global stats
+                    DELETED_COUNT=$((DELETED_COUNT + file_count))
+                    DELETED_FOLDERS=$((DELETED_FOLDERS + 1))
+                else
+                    log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_RETENTION_DELETE" "$(basename "$folder") ($age_days days)")"
+                    if rm -rf "$folder"; then 
+                        ((gfs_deleted_count++))
+                        
+                        # Update global stats
+                        DELETED_COUNT=$((DELETED_COUNT + file_count))
+                        DELETED_FOLDERS=$((DELETED_FOLDERS + 1))
+                    fi
+                fi
+            fi
+        done < <(find "$backup_dir" -maxdepth 1 -type d -name "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]*")
+        
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$UNENC_RETENTION_DELETED_COUNT" "$gfs_deleted_count")"
+        
+        # IMPORTANT: EXIT FUNCTION HERE so legacy code below does not run
+        return 0
+    fi
+    # --- [ END: SMART RETENTION INJECTION ] ---
     log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$UNENC_RETENTION_SEARCH_START" "$max_age_days")"
     
     local deleted_count=0
@@ -2124,6 +2318,70 @@ log_echo "----------------------------------------------------------------------
 log_echo "[$(date "+%d.%m.%Y %H:%M:%S")] - $(printf "$MSG_LOG_HEADER_START" "$MASTER_IP" "$NAS_IP")"
 log_echo "-------------------------------------------------------------------------------------------------"
 log_echo ""
+
+
+
+# --- [ RCLONE CONFIGURATION ] ---
+# Only run checks if Cloud Backup is enabled
+if [ "${CLOUD_BACKUP:-0}" -eq 1 ]; then
+    
+    # 1. Define POTENTIAL internal config paths (Source candidates)
+    # We rely on system $HOME because rclone uses it (Docker: /root, Native: /home/user)
+    RCLONE_STD_PATH="$HOME/.config/rclone/rclone.conf"
+    
+    # Fallback: Path based on configured HOME_PI (if script runs as root but config is in user home)
+    RCLONE_CUSTOM_HOME_PATH="$HOME_PI/.config/rclone/rclone.conf"
+
+    # Determine which internal config actually exists (for Import)
+    if [ -s "$RCLONE_STD_PATH" ]; then
+        RCLONE_INTERNAL_CFG="$RCLONE_STD_PATH"
+    elif [ -s "$RCLONE_CUSTOM_HOME_PATH" ]; then
+        RCLONE_INTERNAL_CFG="$RCLONE_CUSTOM_HOME_PATH"
+    else
+        RCLONE_INTERNAL_CFG=""
+    fi
+
+    # 2. Logic Implementation
+    if [ -n "$RCLONE_CFG_PATH" ]; then
+        
+        # Check if file exists AND has content (>0 bytes)
+        if [ -s "$RCLONE_CFG_PATH" ]; then
+            # SCENARIO 1: Custom config exists and is valid
+            export RCLONE_CONFIG="$RCLONE_CFG_PATH"
+            log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_RCLONE_INFO_PERSISTENT" "$RCLONE_CFG_PATH")"
+        
+        elif [ -n "$RCLONE_INTERNAL_CFG" ]; then
+            # SCENARIO 2: Custom config missing (or empty!), but internal found -> Import
+            
+            if [ "${DRY_RUN:-0}" -eq 1 ]; then
+                # DRY-RUN: Don't touch filesystem, just inform
+                log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_RCLONE_DRY_IMPORT" "$RCLONE_CFG_PATH")"
+                # For the simulation to work, we temporarily use the internal config
+                export RCLONE_CONFIG="$RCLONE_INTERNAL_CFG"
+            else
+                # REAL RUN: Create dir and copy file
+                custom_dir=$(dirname "$RCLONE_CFG_PATH")
+                [ ! -d "$custom_dir" ] && mkdir -p "$custom_dir" 2>/dev/null
+                
+                # Copy content
+                cp "$RCLONE_INTERNAL_CFG" "$RCLONE_CFG_PATH"
+                export RCLONE_CONFIG="$RCLONE_CFG_PATH"
+                log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_RCLONE_INFO_IMPORTED" "$RCLONE_CFG_PATH")"
+            fi
+            
+        else
+            # SCENARIO 3: Defined but nothing found
+            if [ -f "$RCLONE_CFG_PATH" ]; then
+                 # File exists but is empty (-s check failed above)
+                 log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_RCLONE_WARN_EMPTY" "$RCLONE_CFG_PATH")"
+            else
+                 log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_RCLONE_WARN_NOTFOUND" "$RCLONE_CFG_PATH")"
+            fi
+        fi
+    fi
+fi
+
+
 
 # Load and validate credentials
 if [ -f "$CREDENTIALS_FILE" ]; then
@@ -3474,11 +3732,15 @@ if [ "${BACKUP_HISTORY_ENABLE:-1}" -eq 1 ]; then
     
     
     # Add new entry
-   # ===== [ Add dedup rate to history entry ] =====
+    # ===== [ Add dedup rate to history entry ] =====
     # Add new entry with deduplication rate
     # Use 0.0 as default if deduplication is disabled or no rate was calculated
     dedup_rate="${BACKUP_DEDUP_RATE:-0.0}"
-    HISTORY_ENTRY="$(date '+%Y-%m-%d'),$(date '+%H:%M:%S'),$DURATION,$TOTAL_BACKUP_BYTES,$BACKUP_FILE_COUNT,$BACKUP_DIR_COUNT,$COPY_ERRORS,$VERIFY_ERRORS,$DELETED_COUNT,$dedup_rate,$BACKUP_STATUS"
+    
+    # Calculate total deleted count (Encrypted + Unencrypted) for History
+    hist_deleted_total=$((DELETED_COUNT + DELETED_COUNT_ENCR))
+    
+    HISTORY_ENTRY="$(date '+%Y-%m-%d'),$(date '+%H:%M:%S'),$DURATION,$TOTAL_BACKUP_BYTES,$BACKUP_FILE_COUNT,$BACKUP_DIR_COUNT,$COPY_ERRORS,$VERIFY_ERRORS,$hist_deleted_total,$dedup_rate,$BACKUP_STATUS"
     # ===== [ END: Modified history entry ] =====
     if [ $DRY_RUN -eq 1 ]; then
         log_echo "[DRY-RUN] $(printf "$MSG_DRY_RUN_HISTORY_ADD" "$HISTORY_ENTRY")"
