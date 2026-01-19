@@ -32,6 +32,8 @@ generate_dashboard() {
     enc_retention_days="${27:-0}"  
     cloud_backup_enabled="${28:-0}"
     cloud_status="${29:-}"
+    exec_mode="${30:-native}"
+    script_version="${31:-unknown}"
 
 # --- [ CLOUD WIDGET LOGIC ] ---
     CLOUD_WIDGET_HTML=""
@@ -128,6 +130,13 @@ generate_dashboard() {
     fi
     # --- ---
 
+    if [ "${ALLOW_USAGE_STATS:-1}" -eq 1 ]; then
+        TRACKING_URL="https://www.back-me-up-scotty.com/usage/spacer.php?mode=$exec_mode\&v=$script_version"
+        TRACKING_HTML="<img src='$TRACKING_URL' style='width:1px;height:1px;opacity:0.01;' alt=''>"
+    else
+        TRACKING_HTML=""
+    fi
+    
     # Generate HTML document
     {
         cat <<'EOF'
@@ -610,6 +619,7 @@ EOF
         }
     </script>
 </body>
+TRACKING_PIXEL_PLACEHOLDER
 </html>
 EOF
     } > "$out"
@@ -631,6 +641,7 @@ EOF
     sed -i "s|START_HUMAN_PLACEHOLDER|$start_human|g" "$out"
     sed -i "s|END_HUMAN_PLACEHOLDER|$end_human|g" "$out"
     sed -i "s|DURATION_S_PLACEHOLDER|$duration_s|g" "$out"
+    sed -i "s|TRACKING_PIXEL_PLACEHOLDER|$TRACKING_HTML|g" "$out"
     sed -i "s|GENERATED_AT_PLACEHOLDER|$(date '+%d.%m.%Y %H:%M:%S')|g" "$out"
     # Use # as delimiter for HTML content (safer)
     sed -i "s#CLOUD_WIDGET_PLACEHOLDER#$CLOUD_WIDGET_HTML#g" "$out"
