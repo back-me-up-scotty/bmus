@@ -79,6 +79,13 @@ else
     CONFIG_DIR="$(dirname "$CONFIG_FILE")"
 fi
 
+# Detect Execution Mode for Statistics
+if [ -f "/.dockerenv" ]; then
+    EXEC_MODE="docker"
+else
+    EXEC_MODE="native"
+fi
+
 # --- [ 1. LOAD CONFIG ] ------------------------------------
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "FATAL ERROR: Configuration file not found: $CONFIG_FILE"
@@ -3829,9 +3836,9 @@ if [ "${DASHBOARD_ENABLE:-0}" -eq 1 ]; then
                     MAX_SPIKE_BYTES=$(tail -n +2 "$HISTORY_PATH" | tail -n 30 | awk -F',' 'BEGIN{max=0} {if($4>max) max=$4} END {print max}')
                     MAX_SPIKE_HUMAN=$(numfmt --to=iec --suffix=B "$MAX_SPIKE_BYTES")
                 fi
-                
-                
-                generate_dashboard "$OUTPUT_HTML" "$BACKUP_SIZE_HUMAN" "$BACKUP_FILE_COUNT" "$BACKUP_DIR_COUNT" "$DASHBOARD_DISPLAY_PATH" "$NAS_IP" "$MASTER_IP" "$TOTAL_DELETED_COUNT" "$COPY_ERRORS" "$VERIFY_ERRORS" "$START" "$END" "$DURATION" "$LOGFILE" "$DEDUP_LOGFILE" "$DELETED_FOLDERS" "$KEPT_FOLDERS" "$RESOURCE_LOGFILE" "$RAM_TOTAL_MB" "$DEDUP_SAVED_HUMAN" "$AVG_DURATION_HUMAN" "$SUCCESS_RATE_DISPLAY" "$MAX_SPIKE_HUMAN" "${DASHBOARD_LINE_NEW_DIRS:-100}" "$TOTAL_BACKUP_BYTES" "${BACKUP_AGE_DAYS:-0}" "${ENCRYPTED_BACKUP_AGE_DAYS:-0}" "${CLOUD_BACKUP:-0}" "${CLOUD_STATUS:-}"
+
+                BMUS_VERSION=$(head -n 5 "$0" | grep "v\.[0-9]" | sed 's/.*v\.\([0-9.]*\).*/\1/')
+                generate_dashboard "$OUTPUT_HTML" "$BACKUP_SIZE_HUMAN" "$BACKUP_FILE_COUNT" "$BACKUP_DIR_COUNT" "$DASHBOARD_DISPLAY_PATH" "$NAS_IP" "$MASTER_IP" "$TOTAL_DELETED_COUNT" "$COPY_ERRORS" "$VERIFY_ERRORS" "$START" "$END" "$DURATION" "$LOGFILE" "$DEDUP_LOGFILE" "$DELETED_FOLDERS" "$KEPT_FOLDERS" "$RESOURCE_LOGFILE" "$RAM_TOTAL_MB" "$DEDUP_SAVED_HUMAN" "$AVG_DURATION_HUMAN" "$SUCCESS_RATE_DISPLAY" "$MAX_SPIKE_HUMAN" "${DASHBOARD_LINE_NEW_DIRS:-100}" "$TOTAL_BACKUP_BYTES" "${BACKUP_AGE_DAYS:-0}" "${ENCRYPTED_BACKUP_AGE_DAYS:-0}" "${CLOUD_BACKUP:-0}" "${CLOUD_STATUS:-}" "${EXEC_MODE:-native}" "${BMUS_VERSION:-unknown}"
                 # ===== [ End Dashboard call ] =====
                 
                 
