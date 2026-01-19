@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.7
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.8
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
