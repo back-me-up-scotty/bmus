@@ -1,5 +1,5 @@
 #!/bin/bash
-# Dashboard Generator v.25.1
+# Dashboard Generator v.25.2
 # This script generates the dashboard with Dark/Light mode support.
 
 generate_dashboard() {
