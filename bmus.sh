@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.6
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.7
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
@@ -176,13 +176,13 @@ apply_smart_retention_tags() {
     # Monthly Tag (1st of Month)
     if [ "$day_of_month" -eq "01" ]; then
         touch "$target_dir/_RETENTION_MONTHLY_KEEP.txt"
-        log_echo "$MSG_RETENTION_TAG_MONTHLY"
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_RETENTION_TAG_MONTHLY"
     fi
 
     # Weekly Tag (Sunday)
     if [ "$day_of_week" -eq "7" ]; then
         touch "$target_dir/_RETENTION_WEEKLY_KEEP.txt"
-        log_echo "$MSG_RETENTION_TAG_WEEKLY"
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_RETENTION_TAG_WEEKLY"
     fi
 }
 # -------------------------------------------------------------------------
@@ -1144,6 +1144,7 @@ cleanup_old_encrypted_backups() {
                         # Update global stats
                         DELETED_COUNT_ENCR=$((DELETED_COUNT_ENCR + file_count))
                         DELETED_FOLDERS=$((DELETED_FOLDERS + 1))
+                        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$ENC_RETENTION_DELETED_FOLDER" "$folder" "$file_count")"
                     fi
                 fi
             fi
@@ -1362,6 +1363,7 @@ cleanup_old_unencrypted_backups() {
                         # Update global stats
                         DELETED_COUNT=$((DELETED_COUNT + file_count))
                         DELETED_FOLDERS=$((DELETED_FOLDERS + 1))
+                        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$UNENC_RETENTION_DELETED_FOLDER" "$folder" "$file_count")"
                     fi
                 fi
             fi
