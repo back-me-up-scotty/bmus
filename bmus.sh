@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.8
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.9
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
@@ -242,7 +242,12 @@ check_nas_reachability() {
 
 # --- [ ENCRYPTION: Load encryption functions ] ---
 
-if [ -f "$SCRIPT_DIR/$BACKUP_ENCRYPTION_SCRIPT" ]; then
+# Logic: Check absolute path first, then fallback to SCRIPT_DIR
+if [ -f "$BACKUP_ENCRYPTION_SCRIPT" ]; then
+    # Case A: Absolute path or file in current directory
+    source "$BACKUP_ENCRYPTION_SCRIPT"
+elif [ -f "$SCRIPT_DIR/$BACKUP_ENCRYPTION_SCRIPT" ]; then
+    # Case B: Relative filename, located in script directory (Default)
     source "$SCRIPT_DIR/$BACKUP_ENCRYPTION_SCRIPT"
 fi
 # --- [ END: Encryption functions loaded ] ---
