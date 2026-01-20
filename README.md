@@ -60,7 +60,7 @@ Raspberry Pi to run it efficiently.
 probably the most unique feature of BmuS, apart from the fact that only a few backup tools can back up files 
 AND MySQL/MariaDB databases at the same time.
 
-- The pro version of the dashboard does not only provide simple status information, but also includes trend analyses 
+- The [pro version](https://www.back-me-up-scotty.com/dashboards/bmus_dashboard.html) of the dashboard does not only provide simple status information, but also includes trend analyses 
 (such as size growth, duration and more) and displays the backup history of the last 30 days.
 
 **Dashboard Standard Version (included)**
