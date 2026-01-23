@@ -49,7 +49,7 @@ Windows system to a NAS.
 
 **Features**
 
-- BmuS features encryption, deduplication, cloud storage / backup and much more.
+- BmuS features encryption, Grandfather-Father-Son (GFS) Backup, deduplication, cloud storage / backup and much more.
 
 - BmuS can be installed directly on the source system or via a Docker repository, which is also available.
 
