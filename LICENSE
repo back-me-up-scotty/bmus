@@ -27,8 +27,13 @@ paid product, service package, or commercial distribution.
 c) No "Backup-as-a-Service": You may NOT use the Software to offer a paid backup 
 service to third parties where the Software itself is the primary value proposition.
 
-d) No Public Redistribution: You may NOT redistribute, upload to public repositories, 
-or publish the source code or binaries (original or modified) to the general public.
+d) No Public Redistribution (External): You may NOT redistribute, upload to 
+OTHER public repositories (e.g. SourceForge, private hosting), or publish 
+the source code or binaries to the general public outside of the original platform. 
+EXCEPTION: Creating a "Fork" on GitHub (or the platform where the original 
+Author hosts the project) is explicitly permitted to facilitate contributions 
+and personal version control, provided this license header and the copyright 
+notice remain intact.
 
 e) This header must remain in the script and must not be deleted or modified.
 
