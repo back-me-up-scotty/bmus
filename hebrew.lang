@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.26.6) - HEBREW
+# Language File for BmuS - Backu Me Up Scotty (v.26.7) - HEBREW
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -61,6 +61,7 @@ ERR_NAS_IP_NOT_SET="[שגיאה] NAS_IP לא הוגדר בקובץ התצורה"
 ERR_NAS_UNREACHABLE="[שגיאה] ה-NAS לא זמין: %s"
 ERR_NAS_UNREACHABLE_ABORT="ה-NAS %s לא זמין – מבטל"
 ERR_NET_IFACE_NOT_FOUND="שגיאה: לא נמצא ממשק רשת פעיל."
+ERR_NO_SPACE="[ERROR] אין מספיק שטח פנוי! זמין: %s GB, נדרש: %s GB"
 ERR_PERMS_WRONG="[אזהרה] הרשאות: %s (מומלץ: 600)"
 ERR_PING_ABORT="ביטול: ה-NAS לא זמין ו-IGNORE_FAILED_PING=0"
 ERR_PING_ALL_FAILED="שגיאה: ה-NAS %s לא זמין לאחר %s ניסיונות פינג"
@@ -120,6 +121,7 @@ MSG_BACKUP_START="מתחיל גיבוי"
 MSG_BANDWIDTH_LIMIT="הגבלת רוחב פס פעילה: %s KB/s"
 MSG_CHECK_CMD_MAIL="בודק דרישות קדם %s לשליחת מייל"
 MSG_CHECK_PREREQ="בודק דרישות מערכת..."
+MSG_CHECK_SPACE="בודק שטח פנוי ביעד הגיבוי..."
 MSG_CHECK_SUCCESS_TITLE="                בדיקת מערכת עברה בהצלחה - ממשיך בגיבוי"
 MSG_CHECK_TITLE="=== BACKUP-SCRIPT DEPENDENCY CHECK ==="
 MSG_CMD_FOUND_MAIL="%s נמצא"
@@ -228,6 +230,7 @@ MSG_SCRIPT_FILE_BACKED_UP="קובץ מערכת גובה: %s"
 MSG_SEARCH_OLD_BACKUPS="מחפש גיבויים ישנים (>%s ימים, סוגים: %s)..."
 MSG_SOURCES_DEFINED="[OK] מקורות גיבוי הוגדרו"
 MSG_SOURCES_MORE="      ... ו-%s נוספים"
+MSG_SPACE_OK="[OK] שטח פנוי: %s GB (נדרש: %s GB)"
 MSG_SQL_DUMP_NO_TX="מנסה ללא --single-transaction..."
 MSG_SQL_DUMP_NO_TX_SUCCESS="mysqldump %s נוצר (ללא single-transaction)"
 MSG_SQL_DUMP_SIZE_ADDED="גודל דאמפ SQL (%s בתים) התווסף לגודל הכולל."
@@ -255,6 +258,7 @@ MSG_VERIFICATION_DONE="האימות הסתיים: %s חריגות"
 MSG_VERIFICATION_SKIPPED="אימות הגיבוי מדולג מכיוון שהוא מנוטרל."
 MSG_VERIFICATION_START="מתחיל אימות גיבוי (rsync)..."
 MSG_VERIFY_SUCCESS="האימות הושלם בהצלחה: %s"
+MSG_WARN_SPACE_CHECK_FAILED="[WARN] לא ניתן לקבוע את השטח הפנוי. ממשיך..."
 MSG_WEBDAV_PORT_MISSING="פורט WebDAV לא הוגדר."
 
 # --- [ LOG-ENTRY SIZE CALC. ] --------------------------------------------
