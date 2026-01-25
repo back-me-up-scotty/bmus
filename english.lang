@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.26.6) - ENGLISH
+# Language File for BmuS - Backu Me Up Scotty (v.26.7) - ENGLISH
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -61,6 +61,7 @@ ERR_NAS_IP_NOT_SET="[ERROR] NAS_IP not set in Config"
 ERR_NAS_UNREACHABLE="[ERROR] NAS UNREACHABLE: %s"
 ERR_NAS_UNREACHABLE_ABORT="NAS %s unreachable – Aborting"
 ERR_NET_IFACE_NOT_FOUND="ERROR: Could not find active network interface."
+ERR_NO_SPACE="[ERROR] Not enough free space! Available: %s GB, Required: %s GB"
 ERR_PERMS_WRONG="[WARN] Permissions: %s (recommended: 600)"
 ERR_PING_ABORT="ABORT: NAS unreachable and IGNORE_FAILED_PING=0"
 ERR_PING_ALL_FAILED="ERROR: NAS %s unreachable after %s ping attempts"
@@ -120,6 +121,7 @@ MSG_BACKUP_START="Starting Backup"
 MSG_BANDWIDTH_LIMIT="Bandwidth limit active: %s KB/s"
 MSG_CHECK_CMD_MAIL="Checking prerequisites %s for mail sending"
 MSG_CHECK_PREREQ="Checking system prerequisites..."
+MSG_CHECK_SPACE="Checking free space on backup target..."
 MSG_CHECK_SUCCESS_TITLE="                SYSTEM CHECK SUCCESSFUL - CONTINUING WITH BACKUP"
 MSG_CHECK_TITLE="=== BACKUP-SCRIPT DEPENDENCY CHECK ==="
 MSG_CMD_FOUND_MAIL="%s found"
@@ -228,6 +230,7 @@ MSG_SCRIPT_FILE_BACKED_UP="System file backed up: %s"
 MSG_SEARCH_OLD_BACKUPS="Searching for old backups (>%s days, types: %s)..."
 MSG_SOURCES_DEFINED="[OK] Backup sources defined"
 MSG_SOURCES_MORE="      ... and %s more"
+MSG_SPACE_OK="[OK] Free space: %s GB (Required: %s GB)"
 MSG_SQL_DUMP_NO_TX="Trying without --single-transaction..."
 MSG_SQL_DUMP_NO_TX_SUCCESS="mysqldump %s created (without single-transaction)"
 MSG_SQL_DUMP_SIZE_ADDED="SQL dump size (%s Bytes) added to total size."
@@ -256,6 +259,7 @@ MSG_VERIFICATION_DONE="Verification finished: %s deviations"
 MSG_VERIFICATION_SKIPPED="Backup verification skipped as it is disabled."
 MSG_VERIFICATION_START="Starting backup verification (rsync)..."
 MSG_VERIFY_SUCCESS="Verification successfully completed: %s"
+MSG_WARN_SPACE_CHECK_FAILED="[WARN] Could not determine free space. Continuing..."
 MSG_WEBDAV_PORT_MISSING="WebDAV port is not set."
 
 # --- [ LOG-ENTRY SIZE CALC. ] --------------------------------------------
