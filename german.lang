@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.26.6) - GERMAN
+# Language File for BmuS - Backu Me Up Scotty (v.26.7) - GERMAN
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -61,6 +61,7 @@ ERR_NAS_IP_NOT_SET="[FEHLER] NAS_IP nicht in Config gesetzt"
 ERR_NAS_UNREACHABLE="[FEHLER] NAS NICHT ERREICHBAR: %s"
 ERR_NAS_UNREACHABLE_ABORT="NAS %s nicht erreichbar – Abbruch"
 ERR_NET_IFACE_NOT_FOUND="FEHLER: Konnte keine aktive Netzwerkschnittstelle finden."
+ERR_NO_SPACE="[ERROR] Nicht genügend freier Speicherplatz! Verfügbar: %s GB, Benötigt: %s GB"
 ERR_PERMS_WRONG="[WARN] Berechtigungen: %s (empfohlen: 600)"
 ERR_PING_ABORT="ABBRUCH: NAS nicht erreichbar und IGNORE_FAILED_PING=0"
 ERR_PING_ALL_FAILED="FEHLER: NAS %s nach %s Ping-Versuchen nicht erreichbar"
@@ -120,6 +121,7 @@ MSG_BACKUP_START="Starte Backup"
 MSG_BANDWIDTH_LIMIT="Bandbreitenbegrenzung aktiv: %s KB/s"
 MSG_CHECK_CMD_MAIL="Prüfe Voraussetzungen %s für Mailversand"
 MSG_CHECK_PREREQ="Pruefe Systemvoraussetzungen..."
+MSG_CHECK_SPACE="Überprüfe freien Speicherplatz auf dem Backup-Ziel..."
 MSG_CHECK_SUCCESS_TITLE="                SYSTEM-CHECK ERFOLGREICH - FAHRE FORT MIT BACKUP"
 MSG_CHECK_TITLE="=== BACKUP-SCRIPT DEPENDENCY CHECK ==="
 MSG_CMD_FOUND_MAIL="%s gefunden"
@@ -228,6 +230,7 @@ MSG_SCRIPT_FILE_BACKED_UP="System-Datei gesichert: %s"
 MSG_SEARCH_OLD_BACKUPS="Suche nach alten Backups (>%s Tage, Typen: %s)..."
 MSG_SOURCES_DEFINED="[OK] Backup-Quellen definiert"
 MSG_SOURCES_MORE="      ... und %s weitere"
+MSG_SPACE_OK="[OK] Freier Speicherplatz: %s GB (Benötigt: %s GB)"
 MSG_SQL_DUMP_NO_TX="Versuche ohne --single-transaction..."
 MSG_SQL_DUMP_NO_TX_SUCCESS="mysqldump %s erstellt (ohne single-transaction)"
 MSG_SQL_DUMP_SIZE_ADDED="SQL-Dump-Größe (%s Bytes) zu Gesamtgröße hinzugefügt."
@@ -256,6 +259,7 @@ MSG_VERIFICATION_DONE="Verifizierung abgeschlossen: %s Abweichungen"
 MSG_VERIFICATION_SKIPPED="Backup-Verifizierung übersprungen, da deaktiviert."
 MSG_VERIFICATION_START="Starte Backup-Verifizierung (rsync)..."
 MSG_VERIFY_SUCCESS="Verifizierung erfolgreich abgeschlossen: %s"
+MSG_WARN_SPACE_CHECK_FAILED="[WARN] Freier Speicherplatz konnte nicht ermittelt werden. Fahre fort..."
 MSG_WEBDAV_PORT_MISSING="WebDAV-Port ist nicht gesetzt."
 
 # --- [ LOG-ENTRY SIZE CALC. ] --------------------------------------------
@@ -713,3 +717,5 @@ MSG_RETENTION_TAG_MONTHLY="[RETENTION] Markiere aktuelles Backup als MONATS-Arch
 MSG_RETENTION_DELETE="[LOESCHEN] Abgelaufen (Keine greifende Regel): %s"
 CHART_TOOLTIP_MONTHLY=" | Status: Monatlich (Behalten)"
 CHART_TOOLTIP_WEEKLY=" | Status: Wöchentlich (Behalten)"
+
+
