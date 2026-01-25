@@ -18,7 +18,6 @@
 # =========================================================================
 
 
-
 # --- [ ERRORS (ERR_) ] ---------------------------------------------------
 ERR_BACKUP_SOURCES_EMPTY="ERROR: ¡El array BACKUP_SOURCES está vacío!"
 ERR_BACKUP_SOURCES_MISSING="[ERROR] No hay fuentes de copia de seguridad definidas (BACKUP_SOURCES está vacío)"
