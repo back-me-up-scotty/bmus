@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.26.9
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.27.0
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
@@ -37,13 +37,8 @@
 # paid product, service package, or commercial distribution.
 # c) No "Backup-as-a-Service": You may NOT use the Software to offer a paid backup 
 # service to third parties where the Software itself is the primary value proposition.
-# d) No Public Redistribution (External): You may NOT redistribute, upload to 
-# OTHER public repositories (e.g. SourceForge, private hosting), or publish 
-# the source code or binaries to the general public outside of the original platform. 
-# EXCEPTION: Creating a "Fork" on GitHub (or the platform where the original 
-# Author hosts the project) is explicitly permitted to facilitate contributions 
-# and personal version control, provided this license header and the copyright 
-# notice remain intact.
+# d) No Public Redistribution: You may NOT redistribute, upload to public repositories, 
+# or publish the source code or binaries (original or modified) to the general public.
 # e) This header must remain in the script and must not be deleted or modified.
 # 
 # OWNERSHIP
@@ -244,6 +239,44 @@ check_nas_reachability() {
         return 1
     fi
 }
+
+# -------------------------------------------------------------------------
+# FUNCTION: check_disk_space
+# Checks if the destination has enough free space (defined in bmus.conf)
+# Returns: 0 if space is sufficient or check disabled, 1 if space is low
+# -------------------------------------------------------------------------
+check_disk_space() {
+    local target_path="$1"
+    local min_gb="${MIN_FREE_SPACE_GB:-0}"
+
+    # Skip check if disabled
+    if [ "$min_gb" -le 0 ]; then
+        return 0
+    fi
+
+    log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_CHECK_SPACE" "$target_path")"
+
+    # Get available space in GB (using -P for portability and awk to extract column 4 'Available')
+    # We use -B 1G to force Gigabyte blocks via coreutils df.
+    # Note: If df fails to read headers correctly, logical checks handle the fallback.
+    local avail_gb=$(df -P -B 1G "$target_path" 2>/dev/null | awk 'NR==2 {print $4}' | tr -d 'G')
+
+    # Safety check if df failed or returned empty
+    if [ -z "$avail_gb" ]; then
+        # If we cannot determine space (e.g. strict permissions), we log a warning but continue
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_WARN_SPACE_CHECK_FAILED"
+        return 0
+    fi
+
+    if [ "$avail_gb" -lt "$min_gb" ]; then
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$ERR_NO_SPACE" "$avail_gb" "$min_gb")"
+        return 1
+    else
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$MSG_SPACE_OK" "$avail_gb" "$min_gb")"
+        return 0
+    fi
+}
+
 
 # --- [ ENCRYPTION: Load encryption functions ] ---
 
@@ -713,7 +746,7 @@ restore_backup() {
     local single_file="$4"
     local latest_only="${RESTORE_LATEST:-0}"
     
-     echo "[3/5] $(printf "$RESTORE_INFO_SEARCH_DATE" "$restore_date")"
+     echo "$(printf "$RESTORE_INFO_SEARCH_DATE" "$restore_date")"
     
     # ===== [ MODIFIED: Detect structure and adapt search ] =====
     local structure=$(detect_backup_structure "$source_dir")
@@ -793,7 +826,7 @@ restore_backup() {
         echo ""
     fi
     
-    echo "[5/5] $(printf "$RESTORE_INFO_RESTORING" "$restore_target")"
+    echo "$(printf "$RESTORE_INFO_RESTORING" "$restore_target")"
     
     mkdir -p "$restore_target"
     if [ $? -ne 0 ]; then
@@ -2639,6 +2672,40 @@ if [ "$BACKUP_ENCRYPTION" -eq 1 ]; then
 fi 
 # --- [ END: Encryption mount ] ---
 
+
+# =========================================================================
+# CHECK DISK SPACE (QUOTA / PHYSICAL)
+# =========================================================================
+# Check if enough space is available.
+# We determine the physical path to check: 
+# If encryption is active, ORIGINAL_BACKUP_PATH holds the physical mount.
+# Otherwise BACKUP_PATH is the physical mount.
+
+CHECK_PATH="$BACKUP_PATH"
+if [ -n "$ORIGINAL_BACKUP_PATH" ]; then
+    CHECK_PATH="$ORIGINAL_BACKUP_PATH"
+fi
+
+if ! check_disk_space "$CHECK_PATH"; then
+    # Error message is already logged by check_disk_space (ERR_NO_SPACE)
+
+    # 1. Unmount Encrypted Filesystem (if active)
+    if [ "${BACKUP_ENCRYPTION:-0}" -eq 1 ]; then
+        umount_encrypted_filesystem "$ENCRYPTION_PLAINTEXT_MOUNT"
+    fi
+
+    # 2. Unmount NAS Share
+    # We use CHECK_PATH because we determined above that this is the physical mount
+    sudo umount "$CHECK_PATH"
+    
+    if [ $? -eq 0 ]; then
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $MSG_UMOUNT_SUCCESS"
+    else
+        log_echo "[$(date '+%d.%m.%Y %H:%M:%S')] - $(printf "$ERR_UMOUNT_FAILED" "$CHECK_PATH")"
+    fi
+
+    exit 1
+fi
 # ===== [ DEDUPLICATION - Setup ] =====
 # Initialize deduplication if enabled
 DEDUP_REFERENCE_DIR=""
