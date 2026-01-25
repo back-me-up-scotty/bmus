@@ -1,5 +1,5 @@
 # =========================================================================
-# Language File for BmuS - Backu Me Up Scotty (v.26.6) - FRENCH
+# Language File for BmuS - Backu Me Up Scotty (v.26.7) - FRENCH
 # =========================================================================
 # The language files must be located in the script directory.
 # Please note that errors may occur when creating logs or 
@@ -61,6 +61,7 @@ ERR_NAS_IP_NOT_SET="[ERREUR] NAS_IP non défini dans la configuration"
 ERR_NAS_UNREACHABLE="[ERREUR] NAS INACCESSIBLE : %s"
 ERR_NAS_UNREACHABLE_ABORT="NAS %s inaccessible – Abandon"
 ERR_NET_IFACE_NOT_FOUND="ERREUR : Impossible de trouver une interface réseau active."
+ERR_NO_SPACE="[ERROR] Espace libre insuffisant ! Disponible : %s GB, Requis : %s GB"
 ERR_PERMS_WRONG="[WARN] Permissions : %s (recommandé : 600)"
 ERR_PING_ABORT="ABANDON : NAS inaccessible et IGNORE_FAILED_PING=0"
 ERR_PING_ALL_FAILED="ERREUR : NAS %s inaccessible après %s tentatives de ping"
@@ -120,6 +121,7 @@ MSG_BACKUP_START="Démarrage de la sauvegarde"
 MSG_BANDWIDTH_LIMIT="Limite de bande passante active : %s KO/s"
 MSG_CHECK_CMD_MAIL="Vérification des prérequis %s pour l\'envoi de mail"
 MSG_CHECK_PREREQ="Vérification des prérequis système..."
+MSG_CHECK_SPACE="Vérification de l\'espace libre sur la cible de sauvegarde..."
 MSG_CHECK_SUCCESS_TITLE="                VÉRIFICATION DU SYSTÈME RÉUSSIE - POURSUITE DE LA SAUVEGARDE"
 MSG_CHECK_TITLE="=== BACKUP-SCRIPT DEPENDENCY CHECK ==="
 MSG_CMD_FOUND_MAIL="%s trouvé"
@@ -228,6 +230,7 @@ MSG_SCRIPT_FILE_BACKED_UP="Fichier système sauvegardé : %s"
 MSG_SEARCH_OLD_BACKUPS="Recherche d\'anciennes sauvegardes (>%s jours, types : %s)..."
 MSG_SOURCES_DEFINED="[OK] Sources de sauvegarde définies"
 MSG_SOURCES_MORE="      ... et %s autres"
+MSG_SPACE_OK="[OK] Espace libre : %s GB (Requis : %s GB)"
 MSG_SQL_DUMP_NO_TX="Essai sans --single-transaction..."
 MSG_SQL_DUMP_NO_TX_SUCCESS="mysqldump %s créé (sans single-transaction)"
 MSG_SQL_DUMP_SIZE_ADDED="Taille du dump SQL (%s Octets) ajoutée à la taille totale."
@@ -255,6 +258,7 @@ MSG_VERIFICATION_DONE="Vérification terminée : %s écarts"
 MSG_VERIFICATION_SKIPPED="Vérification de la sauvegarde ignorée car désactivée."
 MSG_VERIFICATION_START="Démarrage de la vérification de la sauvegarde (rsync)..."
 MSG_VERIFY_SUCCESS="Vérification terminée avec succès : %s"
+MSG_WARN_SPACE_CHECK_FAILED="[WARN] Impossible de déterminer l\'espace libre. Poursuite..."
 MSG_WEBDAV_PORT_MISSING="Le port WebDAV n\'est pas défini."
 
 # --- [ LOG-ENTRY SIZE CALC. ]--------------------------------------------
