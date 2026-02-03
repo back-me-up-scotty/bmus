@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===========================================================================
-# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.27.0
+# BmuS - Back Me Up Scotty - Backup script for Pi/Linux <-> NAS backup v.27.1
 # ===========================================================================
 # -------------------------------------------------------------------------
 # PLEASE SUPPORT FURTHER DEVELOPMENT
@@ -434,7 +434,7 @@ mount_nas_for_restore() {
         sudo chown "$USER":"$USER" "$BACKUP_PATH"
     fi
     
-    echo "$RESTORE_INFO_MOUNTING_NAS"
+   # echo "$RESTORE_INFO_MOUNT_NAS"
     
     # --- FIX: Support NFS & CIFS based on Config ---
     if [ "${NAS_MOUNT_MODE:-cifs_simple}" = "nfs" ]; then
@@ -2132,7 +2132,7 @@ while [[ $# -gt 0 ]]; do
             echo "$RESTORE_HELP_LATEST" 
             echo "$RESTORE_HELP_SOURCE"
             echo ""
-            echo "$RESTORE_HELP_EXAMPLES"
+            echo "$RESTORE_HELP_EXAMPLE"
             echo "$(printf "$RESTORE_HELP_EXAMPLE_BASIC" "$0")"
             echo "$(printf "$RESTORE_HELP_EXAMPLE_LATEST" "$0")"
             echo ""
